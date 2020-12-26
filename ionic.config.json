@@ -1,0 +1,7 @@
+{
+  "name": "actMonit",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
