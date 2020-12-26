@@ -32,6 +32,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "typescript": "~3.9.3",
+    "vue-deploy-s3": "^0.1.0",
     "vue-jest": "^5.0.0-0"
   },
   "description": "actMonit app"
