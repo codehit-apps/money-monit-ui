@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Welcome to act monit</h1>
+    <h1>Welcome to money monit</h1>
   </div>
 </template>
 
