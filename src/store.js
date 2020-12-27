@@ -16,6 +16,7 @@ const apiHeaders = function(appScope) {
   if (appScope != null) {
     headers.append(env("VUE_APP_API_SCOPE_HEADER"), env(`VUE_APP_${appScope}_API_SCOPE_VALUE`))
   }
+  headers.append('x-codehit-client-domain',env("VUE_APP_API_CLIENT_DOMAIN_VALUE") )
   headers.append('x-codehit-auth-token', authToken())
   headers.append('Content-Type', 'application/json')
   return headers
