@@ -21,16 +21,17 @@
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
+    <ion-spinner id="loading-icon" v-if="this.$store.state.isLoading" name="crescent"></ion-spinner>
   </ion-page>
 </template>
 
 <script >
-import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonIcon, IonPage } from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonTabs, IonSpinner, IonLabel, IonIcon, IonPage } from '@ionic/vue';
 import { home, homeOutline, addCircleOutline, addCircle, personCircle, personCircleOutline } from 'ionicons/icons';
 
 export default {
   name: 'Tabs',
-  components: { IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage },
+  components: { IonSpinner, IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage },
   setup() {
     return {
       home,

@@ -1,6 +1,8 @@
 import { createStore } from 'vuex'
 
 import { markAuthenticated, authToken, logout } from './helper'
+import contains from 'underscore/modules/contains'
+import values from 'underscore/modules/values'
 
 const api = function (path) {
   return `${env("VUE_APP_API_URL")}/api${path}`
@@ -24,6 +26,8 @@ const apiHeaders = function(appScope) {
 
 export default createStore({
   state: {
+    isLoading: false,
+    _loadingLog: {},
     categories: [],
     category: {},
     bankAccounts: [],
@@ -113,6 +117,14 @@ export default createStore({
     setUserPassword (state, value) {
       state.user.password = value
     },
+    hideLoader (state, ref) {
+      state._loadingLog[ref] = false
+      state.isLoading = contains(values(state._loadingLog), true)
+    },
+    showLoader (state, ref) {
+      state._loadingLog[ref] = true
+      state.isLoading = contains(values(state._loadingLog), true)
+    },
   },
   actions: {
     login (context, opts) {
@@ -129,6 +141,7 @@ export default createStore({
       })
     },
     fetchCategories (context) {
+      context.commit('showLoader', 'fetchCategories')
       fetch(api('/v1/categories'), {
         method: "GET",
         headers: apiHeaders('CATEGORIES')
@@ -136,6 +149,8 @@ export default createStore({
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setCategories', items)
+      }).finally(function () {
+        context.commit('hideLoader', 'fetchCategories')
       })
     },
     fetchCategory (context, categoryId) {
@@ -148,6 +163,7 @@ export default createStore({
         let item = state.categories.find((item) => { return item.id == categoryId })
         context.commit('setCategory', item)
       } else {
+        context.commit('showLoader', 'fetchCategory')
         fetch(api(`/v1/categories/${categoryId}`), {
           method: "GET",
           headers: apiHeaders('CATEGORIES')
@@ -155,12 +171,15 @@ export default createStore({
         .then(resp => resp.json())
         .then(function(item) {
           context.commit('setCategory', item)
+        }).finally(function () {
+          context.commit('hideLoader', 'fetchCategory')
         })
       }
     },
     updateCategory (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'updateCategory')
       fetch(api(`/v1/categories/${state.category.id}`), {
         method: "PUT",
         headers: apiHeaders('CATEGORIES'),
@@ -171,10 +190,14 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'updateCategory')
+      })
     },
     createCategory (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'createCategory')
       fetch(api(`/v1/categories`), {
         method: "POST",
         headers: apiHeaders('CATEGORIES'),
@@ -185,17 +208,25 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'createCategory')
+      })
     },
     deleteCategory (context, opts) {
       const [categoryId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteCategory')
       fetch(api(`/v1/categories/${categoryId}`), {
         method: "DELETE",
         headers: apiHeaders('CATEGORIES'),
       })
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteCategory')
+      })
     },
     fetchBankAccounts (context) {
+      context.commit('showLoader', 'fetchBankAccounts')
       fetch(api('/v1/bank_accounts'), {
         method: "GET",
         headers: apiHeaders('BANK_ACCOUNTS')
@@ -203,6 +234,9 @@ export default createStore({
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setBankAccounts', items)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchBankAccounts')
       })
     },
     fetchBankAccount (context, bankAccountId) {
@@ -215,6 +249,7 @@ export default createStore({
         let item = state.bankAccounts.find((item) => { return item.id == bankAccountId })
         context.commit('setBankAccount', item)
       } else {
+        context.commit('showLoader', 'fetchBankAccount')
         fetch(api(`/v1/bank_accounts/${bankAccountId}`), {
           method: "GET",
           headers: apiHeaders('BANK_ACCOUNTS')
@@ -223,11 +258,15 @@ export default createStore({
         .then(function(item) {
           context.commit('setBankAccount', item)
         })
+        .finally(function () {
+          context.commit('hideLoader', 'fetchBankAccount')
+        })
       }
     },
     updateBankAccount (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'updateBankAccount')
       fetch(api(`/v1/bank_accounts/${state.bankAccount.id}`), {
         method: "PUT",
         headers: apiHeaders('BANK_ACCOUNTS'),
@@ -238,10 +277,14 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'updateBankAccount')
+      })
     },
     createBankAccount (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'createBankAccount')
       fetch(api(`/v1/bank_accounts`), {
         method: "POST",
         headers: apiHeaders('BANK_ACCOUNTS'),
@@ -252,17 +295,25 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'createBankAccount')
+      })
     },
     deleteBankAccount (context, opts) {
       const [bankAccountId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteBankAccount')
       fetch(api(`/v1/bank_accounts/${bankAccountId}`), {
         method: "DELETE",
         headers: apiHeaders('BANK_ACCOUNTS'),
       })
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteBankAccount')
+      })
     },
     fetchUsers (context) {
+      context.commit('showLoader', 'fetchUsers')
       fetch(api('/v1/users'), {
         method: "GET",
         headers: apiHeaders('USERS')
@@ -270,6 +321,9 @@ export default createStore({
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setUsers', items)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchUsers')
       })
     },
     fetchUser (context, userId) {
@@ -282,6 +336,7 @@ export default createStore({
         let item = state.users.find((item) => { return item.id == userId })
         context.commit('setUser', item)
       } else {
+        context.commit('showLoader', 'fetchUser')
         fetch(api(`/v1/users/${userId}`), {
           method: "GET",
           headers: apiHeaders('USERS')
@@ -290,11 +345,15 @@ export default createStore({
         .then(function(item) {
           context.commit('setUser', item)
         })
+        .finally(function () {
+          context.commit('hideLoader', 'fetchUser')
+        })
       }
     },
     updateUser (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'updateUser')
       fetch(api(`/v1/users/${state.user.id}`), {
         method: "PUT",
         headers: apiHeaders('USERS'),
@@ -305,10 +364,14 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'updateUser')
+      })
     },
     createUser (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'createUser')
       fetch(api(`/v1/users`), {
         method: "POST",
         headers: apiHeaders('USERS'),
@@ -319,17 +382,25 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'createUser')
+      })
     },
     deleteUser (context, opts) {
       const [userId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteUser')
       fetch(api(`/v1/users/${userId}`), {
         method: "DELETE",
         headers: apiHeaders('USERS'),
       })
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteUser')
+      })
     },
     fetchTransactions (context) {
+      context.commit('showLoader', 'fetchTransactions')
       fetch(api('/v1/transactions'), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
@@ -338,8 +409,12 @@ export default createStore({
       .then(function(items) {
         context.commit('setTransactions', items)
       })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchTransactions')
+      })
     },
     fetchTransactionTypes (context) {
+      context.commit('showLoader', 'fetchTransactionTypes')
       fetch(api('/v1/transaction_types'), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
@@ -347,6 +422,9 @@ export default createStore({
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setTransactionTypes', items)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchTransactionTypes')
       })
     },
     fetchTransaction (context, transactionId) {
@@ -359,6 +437,7 @@ export default createStore({
         let item = state.transactions.find((item) => { return item.id == transactionId })
         context.commit('setTransaction', item)
       } else {
+        context.commit('showLoader', 'fetchTransaction')
         fetch(api(`/v1/transactions/${transactionId}`), {
           method: "GET",
           headers: apiHeaders('TRANSACTIONS')
@@ -367,11 +446,15 @@ export default createStore({
         .then(function(item) {
           context.commit('setTransaction', item)
         })
+        .finally(function () {
+          context.commit('hideLoader', 'fetchTransaction')
+        })
       }
     },
     updateTransaction (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'updateTransaction')
       fetch(api(`/v1/transactions/${state.transaction.id}`), {
         method: "PUT",
         headers: apiHeaders('TRANSACTIONS'),
@@ -382,10 +465,14 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'updateTransaction')
+      })
     },
     createTransaction (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
+      context.commit('showLoader', 'createTransaction')
       fetch(api(`/v1/transactions`), {
         method: "POST",
         headers: apiHeaders('TRANSACTIONS'),
@@ -396,15 +483,22 @@ export default createStore({
       .then(resp => resp.json())
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'createTransaction')
+      })
     },
     deleteTransaction (context, opts) {
       const [transactionId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteTransaction')
       fetch(api(`/v1/transactions/${transactionId}`), {
         method: "DELETE",
         headers: apiHeaders('TRANSACTIONS'),
       })
       .then(onSuccess)
       .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteTransaction')
+      })
     },
   }
 })
