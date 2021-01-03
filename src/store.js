@@ -37,6 +37,8 @@ export default createStore({
     transactionTypes: [],
     users: [],
     user: {},
+    budgets: [],
+    budget: {},
   },
   mutations: {
     setCategories (state, items) {
@@ -68,6 +70,24 @@ export default createStore({
     },
     setTransactions (state, items) {
       state.transactions = items
+    },
+    setBudgets (state, items) {
+      state.budgets = items
+    },
+    setBudgetName (state, value) {
+      state.budget.name = value
+    },
+    setBudgetFromDate (state, value) {
+      state.budget.from_date = value
+    },
+    setBudgetToDate (state, value) {
+      state.budget.to_date = value
+    },
+    setBudgetActive (state, value) {
+      state.budget.active = value
+    },
+    setBudget (state, item) {
+      state.budget = item
     },
     setTransactionTypes (state, items) {
       state.transactionTypes = items
@@ -498,6 +518,93 @@ export default createStore({
       .catch(onError)
       .finally(function () {
         context.commit('hideLoader', 'deleteTransaction')
+      })
+    },
+    fetchBudgets (context) {
+      context.commit('showLoader', 'fetchBudgets')
+      fetch(api('/v1/budgets'), {
+        method: "GET",
+        headers: apiHeaders('BUDGETS')
+      })
+      .then(resp => resp.json())
+      .then(function(items) {
+        context.commit('setBudgets', items)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchBudgets')
+      })
+    },
+    fetchBudget (context, budgetId) {
+      if (!budgetId){
+        context.commit('setBudget', {})
+        return false
+      }
+      const { state } = context
+      if (state.budgets.length) {
+        let item = state.budgets.find((item) => { return item.id == budgetId })
+        context.commit('setBudget', item)
+      } else {
+        context.commit('showLoader', 'fetchBudget')
+        fetch(api(`/v1/budgets/${budgetId}`), {
+          method: "GET",
+          headers: apiHeaders('BUDGETS')
+        })
+        .then(resp => resp.json())
+        .then(function(item) {
+          context.commit('setBudget', item)
+        })
+        .finally(function () {
+          context.commit('hideLoader', 'fetchBudget')
+        })
+      }
+    },
+    updateBudget (context, opts) {
+      const { state } = context
+      const [onSuccess, onError] = opts
+      context.commit('showLoader', 'updateBudget')
+      fetch(api(`/v1/budgets/${state.budget.id}`), {
+        method: "PUT",
+        headers: apiHeaders('BUDGETS'),
+        body: JSON.stringify({
+          budget: state.budget
+        })
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'updateBudget')
+      })
+    },
+    createBudget (context, opts) {
+      const { state } = context
+      const [onSuccess, onError] = opts
+      context.commit('showLoader', 'createBudget')
+      fetch(api(`/v1/budgets`), {
+        method: "POST",
+        headers: apiHeaders('BUDGETS'),
+        body: JSON.stringify({
+          budget: state.budget
+        })
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'createBudget')
+      })
+    },
+    deleteBudget (context, opts) {
+      const [budgetId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteBudget')
+      fetch(api(`/v1/budgets/${budgetId}`), {
+        method: "DELETE",
+        headers: apiHeaders('BUDGETS'),
+      })
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteBudget')
       })
     },
   }

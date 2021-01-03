@@ -15,51 +15,14 @@
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-list>
-        <ion-item-sliding>
-          <ion-item router-link="/budgets/1/edit">
+        <ion-item-sliding v-for="budget in this.$store.state.budgets" :key="budget.id">
+          <ion-item :router-link="`/budgets/${budget.id}/edit`">
             <ion-label>
-              <h2>Budget for may</h2>
-              <h3>monthly salary</h3>
+              <h2>{{ budget.name }}</h2>
             </ion-label>
           </ion-item>
           <ion-item-options side="end">
-            <ion-item-option color="danger" @click="deleteBank(bank)">Delete</ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-
-        <ion-item-sliding>
-          <ion-item router-link="/budgets/2/edit">
-            <ion-label>
-              <h2>Budget for bigaan</h2>
-              <h3>bi-monthly salary</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" @click="deleteBank(bank)">Delete</ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-
-        <ion-item-sliding>
-          <ion-item router-link="/budgets/3/edit">
-            <ion-label>
-              <h2>Loan budget</h2>
-              <h3>farm buisenes back up</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" @click="deleteBank(bank)">Delete</ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-
-        <ion-item-sliding>
-          <ion-item router-link="/budgets/4/edit">
-            <ion-label>
-              <h2>christmas budget</h2>
-              <h3>Subscription</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" @click="deleteBank(bank)">Delete</ion-item-option>
+            <ion-item-option color="danger" @click="deleteBudget(budget.id)">Delete</ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>
@@ -68,15 +31,30 @@
 </template>
 
 <script >
-import { IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 
 export default  {
-  name: 'Budgets',
-  components: { IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
+  name: 'Budget',
+  components: { IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
+    }
+  },
+  created: function () {
+    this.$store.dispatch('fetchBudgets')
+  },
+  methods: {
+    deleteBudget: function (userId) {
+      const self = this
+      const success = function () {
+        self.$store.dispatch('fetchBudgets')
+      }
+      const error = function (err) {
+        console.log(err)
+      }
+      this.$store.dispatch('deleteBudget', [userId, success, error])
     }
   }
 }

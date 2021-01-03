@@ -136,7 +136,7 @@ export default  {
       const self = this
       const success = function (resp) {
         if (resp.errors && Object.keys(resp.errors).length) {
-          self.showAlert("Bank account could not be created. Please fix errors on the form.", "danger")
+          self.showAlert("User could not be created. Please fix errors on the form.", "danger")
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
