@@ -41,6 +41,27 @@
         <ion-text color="danger" v-for="error in errors['active']" :key="error">{{ error }}</ion-text>
       </div>
 
+      <ion-item>
+        <h2>
+          <b> Budget Items</b>
+        </h2>
+      </ion-item>
+      <ion-item v-for="line in this.$store.state.budget.budget_lines" :key="line.id" :router-link="`/budgets/${this.$store.state.budget.id}/items/${line.id}/edit`">
+        <ion-label>
+          <ion-text class="ion-float-left">  {{ budgetCategoryName(line.category_id) }} </ion-text>
+          <ion-text class="ion-float-right"> {{ toPeso(line.amount) }} </ion-text>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="ion-text-right">
+          <ion-button color="secondary" @click="this.$router.push({path: `/budgets/${this.$store.state.budget.id}/items/new`})">
+            <ion-icon :icon="addCircleOutline"/>
+            &nbsp; Line
+          </ion-button>
+        </ion-label>
+      </ion-item>
+
       <div class="action-end ion-padding">
         <ion-text class="ion-margin-end" @click="this.$router.push({path: '/budgets'})" >Cancel</ion-text>
         <ion-button type="submit" @click="saveBudget" color="primary">Save</ion-button>
@@ -50,15 +71,18 @@
 </template>
 
 <script >
-import { toastController, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel } from '@ionic/vue';
-import { addCircle } from 'ionicons/icons';
+import { toastController, IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel } from '@ionic/vue';
+import { addCircle, addCircleOutline } from 'ionicons/icons';
+import { findWhere } from 'underscore';
+import { pesoFormatter } from '../../helper'
 
 export default  {
   name: 'Budgets',
-  components: { IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
+  components: { IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
+      addCircleOutline,
     }
   },
   created: function () {
@@ -104,6 +128,9 @@ export default  {
     },
   },
   methods: {
+    toPeso: function (num) {
+      return pesoFormatter().format(num)
+    },
     async showAlert(message, color) {
       const alert = await toastController
         .create({
@@ -154,8 +181,15 @@ export default  {
       this.$store.dispatch('createBudget', [success, error])
     },
     initForm: function () {
-      this.$store.dispatch('fetchBudget', this.$route.params.id)
-    }
+      this.$store.dispatch('reloadBudget', this.$route.params.id)
+      this.$store.dispatch('fetchCategories')
+    },
+    budgetCategory: function (category_id) {
+      return findWhere(this.$store.state.categories, {id: category_id}) || {}
+    },
+    budgetCategoryName: function (category_id) {
+      return this.budgetCategory(category_id).name
+    },
   },
   watch: {
     $route() {

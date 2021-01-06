@@ -27,8 +27,8 @@
               <h1>{{ budget.name }}</h1>
               <div class="budget-lines">
                 <div class="budget-line" v-for="line in budget.budget_lines" :key="line.id">
-                  <p>{{ budgetCategoryName(line.category_id) }}</p>
-                  <p>{{ toPeso(line.amount) }}</p>
+                  <span>{{ budgetCategoryName(line.category_id) }}</span>
+                  <span>{{ toPeso(line.amount) }}</span>
                 </div>
               </div>
             </ion-label>
@@ -88,12 +88,15 @@ export default  {
 </script>
 
 <style lang="css">
-  ul {
-    list-style: none;
-  }
   .budget-lines .budget-line {
     display: flex;
     justify-content: space-between;
+    font-size: 90%;
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
+  .budget-lines .budget-line:nth-child(odd) {
+    background: #eee;
   }
   .header-label {
     display: flex;

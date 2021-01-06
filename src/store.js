@@ -4,6 +4,7 @@ import { markAuthenticated, authToken, logout } from './helper'
 import contains from 'underscore/modules/contains'
 import values from 'underscore/modules/values'
 import isEmpty from 'underscore/modules/isEmpty'
+import findWhere from 'underscore/modules/findWhere'
 
 const api = function (path) {
   return `${env("VUE_APP_API_URL")}/api${path}`
@@ -43,8 +44,18 @@ export default createStore({
     budgets: [],
     budget: {},
     currentUser: {},
+    budget_line: {},
   },
   mutations: {
+    setBudgetLine (state, value) {
+      state.budget_line = value
+    },
+    setBudgetLineCategoryId (state, value) {
+      state.budget_line.category_id = value
+    },
+    setBudgetLineAmount (state, value) {
+      state.budget_line.amount = value
+    },
     setCategories (state, items) {
       state.categories = items
     },
@@ -562,6 +573,20 @@ export default createStore({
         context.commit('hideLoader', 'fetchBudgets')
       })
     },
+    reloadBudget (context, budgetId) {
+      context.commit('showLoader', 'fetchBudget')
+      fetch(api(`/v1/budgets/${budgetId}`), {
+        method: "GET",
+        headers: apiHeaders('BUDGETS')
+      })
+      .then(resp => resp.json())
+      .then(function(item) {
+        context.commit('setBudget', item)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchBudget')
+      })
+    },
     fetchBudget (context, budgetId) {
       if (!budgetId){
         context.commit('setBudget', {})
@@ -572,18 +597,7 @@ export default createStore({
         let item = state.budgets.find((item) => { return item.id == budgetId })
         context.commit('setBudget', item)
       } else {
-        context.commit('showLoader', 'fetchBudget')
-        fetch(api(`/v1/budgets/${budgetId}`), {
-          method: "GET",
-          headers: apiHeaders('BUDGETS')
-        })
-        .then(resp => resp.json())
-        .then(function(item) {
-          context.commit('setBudget', item)
-        })
-        .finally(function () {
-          context.commit('hideLoader', 'fetchBudget')
-        })
+        context.dispatch('reloadBudget', budgetId)
       }
     },
     updateBudget (context, opts) {
@@ -633,6 +647,58 @@ export default createStore({
       .catch(onError)
       .finally(function () {
         context.commit('hideLoader', 'deleteBudget')
+      })
+    },
+    fetchBudgetLine (context, opts) {
+      const [budgetId, budgetLineId] = opts
+      const { state } = context
+      if (state.budgets.length) {
+        let item = state.budgets.find((item) => { return item.id == budgetId })
+        context.commit('setBudget', item)
+        const lines = item.budget_lines || []
+        const line = lines.find((item) => { return item.id == budgetLineId }) || {}
+        context.commit('setBudgetLine', line)
+      } else {
+        context.commit('showLoader', 'fetchBudget')
+        fetch(api(`/v1/budgets/${budgetId}`), {
+          method: "GET",
+          headers: apiHeaders('BUDGETS')
+        })
+        .then(resp => resp.json())
+        .then(function(item) {
+          context.commit('setBudget', item)
+          const lines = item.budget_lines || []
+          const line = lines.find((item) => { return item.id == budgetLineId }) || {}
+          context.commit('setBudgetLine', line)
+        })
+        .finally(function () {
+          context.commit('hideLoader', 'fetchBudget')
+        })
+      }
+    },
+    saveBudgetLine (context, opts) {
+      const { state } = context
+      const [onSuccess, onError] = opts
+      context.commit('showLoader', 'saveBudgetLine')
+      const budget = state.budget
+      if (budget.budget_lines == null) {
+        budget.budget_lines = []
+      }
+      if (state.budget_line != {}) {
+        budget.budget_lines.push(state.budget_line)
+      }
+      fetch(api(`/v1/budgets/${state.budget.id}`), {
+        method: "PUT",
+        headers: apiHeaders('BUDGETS'),
+        body: JSON.stringify({
+          budget: budget
+        })
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'saveBudgetLine')
       })
     },
   }

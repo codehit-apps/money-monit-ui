@@ -95,6 +95,14 @@ const routes = [
         path: '/budgets/:id/edit',
         component: () => import('@/views/budgets/BudgetForm.vue')
       },
+      {
+        path: '/budgets/:budget_id/items/new',
+        component: () => import('@/views/budgets/BudgetLineForm.vue')
+      },
+      {
+        path: '/budgets/:budget_id/items/:id/edit',
+        component: () => import('@/views/budgets/BudgetLineForm.vue')
+      },
       { 
       path: '/users',
         component: () => import('@/views/users/Users.vue')
