@@ -18,7 +18,19 @@
         <ion-item-sliding v-for="budget in this.$store.state.budgets" :key="budget.id">
           <ion-item :router-link="`/budgets/${budget.id}/edit`">
             <ion-label>
-              <h2>{{ budget.name }}</h2>
+              <div class="header-label">
+                <div class="budget-date">
+                  {{ formatDate(budget.from_date) }} - {{ formatDate(budget.to_date) }}
+                </div>
+                <ion-badge v-if="budget.active" color="success">active</ion-badge>
+              </div>
+              <h1>{{ budget.name }}</h1>
+              <div class="budget-lines">
+                <div class="budget-line" v-for="line in budget.budget_lines" :key="line.id">
+                  <p>{{ budgetCategoryName(line.category_id) }}</p>
+                  <p>{{ toPeso(line.amount) }}</p>
+                </div>
+              </div>
             </ion-label>
           </ion-item>
           <ion-item-options side="end">
@@ -31,21 +43,30 @@
 </template>
 
 <script >
-import { IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
+import { findWhere } from 'underscore';
+import { pesoFormatter, dateFormatter } from '../../helper'
 
 export default  {
   name: 'Budget',
-  components: { IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
+  components: { IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
     }
   },
   created: function () {
+    this.$store.dispatch('fetchCategories')
     this.$store.dispatch('fetchBudgets')
   },
   methods: {
+    toPeso: function (num) {
+      return pesoFormatter().format(num)
+    },
+    formatDate: function (date) {
+      return dateFormatter().format(new Date(date))
+    },
     deleteBudget: function (userId) {
       const self = this
       const success = function () {
@@ -55,7 +76,33 @@ export default  {
         console.log(err)
       }
       this.$store.dispatch('deleteBudget', [userId, success, error])
-    }
+    },
+    budgetCategory: function (category_id) {
+      return findWhere(this.$store.state.categories, {id: category_id}) || {}
+    },
+    budgetCategoryName: function (category_id) {
+      return this.budgetCategory(category_id).name
+    },
   }
 }
 </script>
+
+<style lang="css">
+  ul {
+    list-style: none;
+  }
+  .budget-lines .budget-line {
+    display: flex;
+    justify-content: space-between;
+  }
+  .header-label {
+    display: flex;
+    justify-content: space-between;
+  }
+  .budget-date {
+    color: gray;
+    text-transform: uppercase;
+    font-size: 70%;
+    font-weight: bold;
+  }
+</style>

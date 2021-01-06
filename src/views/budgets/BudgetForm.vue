@@ -34,7 +34,7 @@
       </div>
 
       <ion-item>
-        <ion-label position="floating"> Active? </ion-label>
+        <ion-label position="fixed"> Active? </ion-label>
         <ion-toggle color="primary" v-model="active" value='on' :checked="active"/>
       </ion-item>
       <div v-if="!!errors['active']" class="ion-margin-bottom ion-margin-start">

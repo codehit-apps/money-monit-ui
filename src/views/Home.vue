@@ -26,13 +26,13 @@
             <ion-icon :icon="cash"/>
           </ion-card>
           <ion-card class="icon-cell banks" router-link="/banks">
-            <ion-icon :icon="folderOpenOutline"/>
+            <ion-icon :icon="briefcaseOutline"/>
           </ion-card>
           <ion-card class="icon-cell budgets" router-link="/budgets">
             <ion-icon :icon="wallet"/>
           </ion-card>
           <ion-card class="icon-cell categories" router-link="/categories">
-            <ion-icon :icon="pricetags"/>
+            <ion-icon :icon="albumsOutline"/>
           </ion-card>
           <ion-card class="icon-cell users" router-link="/users">
             <ion-icon :icon="peopleCircleOutline"/>
@@ -45,7 +45,7 @@
 
 <script >
 import { IonText, IonIcon, IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/vue';
-import { barChart, folderOpenOutline, cash, briefcase, wallet, pricetags, peopleCircleOutline } from 'ionicons/icons';
+import { barChart, briefcaseOutline, cash, briefcase, wallet, albumsOutline, peopleCircleOutline } from 'ionicons/icons';
 import { txnManager, pesoFormatter } from '../helper'
 
 export default  {
@@ -57,9 +57,9 @@ export default  {
       cash,
       briefcase,
       wallet,
-      pricetags,
+      albumsOutline,
       peopleCircleOutline,
-      folderOpenOutline
+      briefcaseOutline
     }
   },
   created: function () {
