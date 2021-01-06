@@ -110,6 +110,7 @@ export default  {
       return alert.present()
     },
     saveUser: function () {
+      this.$store.commit('setUserRefId')
       if (this.$route.params.id != null) {
         this.updateUser()
       } else {

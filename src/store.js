@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import { markAuthenticated, authToken, logout } from './helper'
 import contains from 'underscore/modules/contains'
 import values from 'underscore/modules/values'
+import isEmpty from 'underscore/modules/isEmpty'
 
 const api = function (path) {
   return `${env("VUE_APP_API_URL")}/api${path}`
@@ -24,6 +25,8 @@ const apiHeaders = function(appScope) {
   return headers
 }
 
+const MONEY_MONIT_USER_REFS = 1000
+
 export default createStore({
   state: {
     isLoading: false,
@@ -39,6 +42,7 @@ export default createStore({
     user: {},
     budgets: [],
     budget: {},
+    currentUser: {},
   },
   mutations: {
     setCategories (state, items) {
@@ -125,6 +129,12 @@ export default createStore({
     setUser (state, item) {
       state.user = item
     },
+    setCurrentUser (state, item) {
+      state.currentUser = item
+    },
+    setUserRefId (state) {
+      state.user.ref_id = MONEY_MONIT_USER_REFS
+    },
     setUserFirstName (state, value) {
       state.user.first_name = value
     },
@@ -156,8 +166,26 @@ export default createStore({
       })
       .then(resp => resp.json())
       .then(function(resp) {
-        if (resp.token != null) markAuthenticated(resp.token)
+        if (resp.token != null) {
+          markAuthenticated(resp.token)
+          context.commit('setCurrentUser', resp.user)
+        }
         onSuccess()
+      })
+    },
+    fetchCurrentUser (context) {
+      const { state } = context
+      if (!isEmpty(state.currentUser)) return false
+      context.commit('showLoader', 'fetchCurrentUser')
+      fetch(`${env("VUE_APP_API_URL")}/user`, {
+        method: "GET",
+        headers: apiHeaders('USERS')
+      })
+      .then(resp => resp.json())
+      .then(function(item) {
+        context.commit('setCurrentUser', item)
+      }).finally(function () {
+        context.commit('hideLoader', 'fetchCurrentUser')
       })
     },
     fetchCategories (context) {
@@ -378,7 +406,7 @@ export default createStore({
         method: "PUT",
         headers: apiHeaders('USERS'),
         body: JSON.stringify({
-          bank_account: state.user
+          user: state.user
         })
       })
       .then(resp => resp.json())
@@ -396,7 +424,7 @@ export default createStore({
         method: "POST",
         headers: apiHeaders('USERS'),
         body: JSON.stringify({
-          bank_account: state.user
+          user: state.user
         })
       })
       .then(resp => resp.json())

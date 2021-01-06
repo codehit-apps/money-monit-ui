@@ -5,8 +5,8 @@
         <ion-item>
           <ion-icon :icon="personCircle" class="ion-margin-end"/>
           <ion-label>
-            <h2>Marvin Dev</h2>
-            <h3>marvin@codehit.net</h3>
+            <h2>{{ this.$store.state.currentUser.name }}</h2>
+            <h3>{{ this.$store.state.currentUser.email }}</h3>
           </ion-label>
         </ion-item>
         <ion-item>
@@ -41,6 +41,9 @@ export default  {
       helpCircle,
       personCircle
     }
+  },
+  created: function () {
+    this.$store.dispatch('fetchCurrentUser')
   },
   methods: {
     signOut: function () {

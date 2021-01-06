@@ -34,7 +34,7 @@
           <ion-card class="icon-cell categories" router-link="/categories">
             <ion-icon :icon="albumsOutline"/>
           </ion-card>
-          <ion-card class="icon-cell users" router-link="/users">
+          <ion-card class="icon-cell users" router-link="/users" v-if="this.$store.state.currentUser.admin">
             <ion-icon :icon="peopleCircleOutline"/>
           </ion-card>
         </div>
