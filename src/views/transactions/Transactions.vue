@@ -81,7 +81,7 @@ export default  {
     }
   },
   created: function () {
-    this.$store.dispatch('fetchTransactions')
+    this.$store.dispatch('fetchTransactions', [this.$route.query])
     this.$store.dispatch('fetchBankAccounts')
     this.$store.dispatch('fetchCategories')
   },
@@ -89,7 +89,7 @@ export default  {
     deleteTransaction: function (transactionId) {
       const self = this
       const success = function () {
-        self.$store.dispatch('fetchTransactions')
+        self.$store.dispatch('fetchTransactions', [])
       }
       const error = function (err) {
         console.log(err)

@@ -171,7 +171,7 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
-          self.$store.dispatch('fetchBudgets')
+          self.$store.dispatch('fetchBudgets', [])
           self.$router.push({path: '/budgets'})
         }
       }

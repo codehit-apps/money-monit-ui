@@ -58,7 +58,7 @@ export default  {
   },
   created: function () {
     this.$store.dispatch('fetchCategories')
-    this.$store.dispatch('fetchBudgets')
+    this.$store.dispatch('fetchBudgets', [])
   },
   methods: {
     toPeso: function (num) {
@@ -70,7 +70,7 @@ export default  {
     deleteBudget: function (userId) {
       const self = this
       const success = function () {
-        self.$store.dispatch('fetchBudgets')
+        self.$store.dispatch('fetchBudgets', [])
       }
       const error = function (err) {
         console.log(err)

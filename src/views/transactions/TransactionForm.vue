@@ -226,7 +226,7 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
-          self.$store.dispatch('fetchTransactions')
+          self.$store.dispatch('fetchTransactions', [])
           self.$router.push({path: '/transactions'})
         }
       }

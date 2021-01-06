@@ -1,30 +1,10 @@
 import { createStore } from 'vuex'
 
-import { markAuthenticated, authToken, logout } from './helper'
+import { markAuthenticated, authToken, logout, api, env, apiHeaders } from './helper'
 import contains from 'underscore/modules/contains'
 import values from 'underscore/modules/values'
 import isEmpty from 'underscore/modules/isEmpty'
 import findWhere from 'underscore/modules/findWhere'
-
-const api = function (path) {
-  return `${env("VUE_APP_API_URL")}/api${path}`
-}
-
-const env = function (name) {
-  return process.env[name]
-}
-
-const apiHeaders = function(appScope) {
-  const headers = new Headers()
-  headers.append(env("VUE_APP_API_ID_HEADER"), env("VUE_APP_API_ID_VALUE"))
-  if (appScope != null) {
-    headers.append(env("VUE_APP_API_SCOPE_HEADER"), env(`VUE_APP_${appScope}_API_SCOPE_VALUE`))
-  }
-  headers.append('x-codehit-client-domain',env("VUE_APP_API_CLIENT_DOMAIN_VALUE") )
-  headers.append('x-codehit-auth-token', authToken())
-  headers.append('Content-Type', 'application/json')
-  return headers
-}
 
 const MONEY_MONIT_USER_REFS = 1000
 
@@ -458,9 +438,18 @@ export default createStore({
         context.commit('hideLoader', 'deleteUser')
       })
     },
-    fetchTransactions (context) {
+    fetchTransactions (context, opts) {
+      const [query] = opts
+      let params = ''
+      if (query != null) {
+        console.log('query', query)
+        params = Object.keys(query).map(function(key){ 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
+        }).join('&')
+      }
+      const apiUrl = params == '' ? '/v1/transactions' : `/v1/transactions?${params}`
       context.commit('showLoader', 'fetchTransactions')
-      fetch(api('/v1/transactions'), {
+      fetch(api(apiUrl), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
       })
@@ -559,7 +548,8 @@ export default createStore({
         context.commit('hideLoader', 'deleteTransaction')
       })
     },
-    fetchBudgets (context) {
+    fetchBudgets (context, opts) {
+      const [onSuccess] = opts
       context.commit('showLoader', 'fetchBudgets')
       fetch(api('/v1/budgets'), {
         method: "GET",
@@ -568,6 +558,7 @@ export default createStore({
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setBudgets', items)
+        if (onSuccess != null) onSuccess()
       })
       .finally(function () {
         context.commit('hideLoader', 'fetchBudgets')

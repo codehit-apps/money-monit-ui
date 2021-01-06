@@ -147,3 +147,6 @@
   background: white;
   border-radius: 50px;
 }
+.text-right {
+  text-align: right;
+}
