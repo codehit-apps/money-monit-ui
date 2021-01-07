@@ -108,6 +108,7 @@ export default  {
       this.$store.dispatch('saveBudgetLine', [success, error])
     },
     initForm: function () {
+      if (this.$route.params.budget_id == null) return false
       this.$store.dispatch('fetchBudgetLine', [this.$route.params.budget_id, this.$route.params.id])
       this.$store.dispatch('fetchCategories')
     },

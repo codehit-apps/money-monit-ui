@@ -565,6 +565,7 @@ export default createStore({
       })
     },
     reloadBudget (context, budgetId) {
+      if (budgetId == null) return false
       context.commit('showLoader', 'reloadBudget')
       fetch(api(`/v1/budgets/${budgetId}`), {
         method: "GET",
