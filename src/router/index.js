@@ -15,13 +15,6 @@ const routes = [
     component: () => import('@/views/auth/Login.vue')
   },
   {
-    path: '/about',
-    component: () => import('@/views/public/About.vue'),
-    meta: {
-      public: true
-    }
-  },
-  {
     path: '/',
     component: Tabs,
     children: [
