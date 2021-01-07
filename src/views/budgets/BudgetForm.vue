@@ -63,6 +63,7 @@
       </ion-item>
 
       <div class="action-end ion-padding">
+        <ion-button type="button" v-if="this.$route.params.id != null"  class="ion-margin-end" @click="copyBudget" color="tertiary">Copy</ion-button>
         <ion-text class="ion-margin-end" @click="this.$router.push({path: '/budgets'})" >Cancel</ion-text>
         <ion-button type="submit" @click="saveBudget" color="primary">Save</ion-button>
       </div> 
@@ -139,6 +140,21 @@ export default  {
           duration: 5000,
         })
       return alert.present()
+    },
+    copyBudget: function () {
+      const self = this
+      const success = function (resp) {
+        if (resp.errors && Object.keys(resp.errors).length) {
+          self.showAlert("Budget could not be copied. Please fix errors on the form.", "danger")
+          self.errors = resp.errors
+        } else {
+          self.$router.push({path: `/budgets/${resp.budget.id}/edit`})
+        }
+      }
+      const error = function (err) {
+        console.log(err)
+      }
+      this.$store.dispatch('copyBudget', [this.$route.params.id, success, error])
     },
     saveBudget: function () {
       if (this.$route.params.id != null) {

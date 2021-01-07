@@ -565,7 +565,7 @@ export default createStore({
       })
     },
     reloadBudget (context, budgetId) {
-      context.commit('showLoader', 'fetchBudget')
+      context.commit('showLoader', 'reloadBudget')
       fetch(api(`/v1/budgets/${budgetId}`), {
         method: "GET",
         headers: apiHeaders('BUDGETS')
@@ -575,7 +575,7 @@ export default createStore({
         context.commit('setBudget', item)
       })
       .finally(function () {
-        context.commit('hideLoader', 'fetchBudget')
+        context.commit('hideLoader', 'reloadBudget')
       })
     },
     fetchBudget (context, budgetId) {
@@ -692,5 +692,19 @@ export default createStore({
         context.commit('hideLoader', 'saveBudgetLine')
       })
     },
+    copyBudget (context, opts) {
+      const [budgetId, onSuccess, onError] = opts
+      context.commit('showLoader', 'copyBudget')
+      fetch(api(`/v1/budgets/${budgetId}/copy`), {
+        method: "POST",
+        headers: apiHeaders('BUDGETS'),
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'copyBudget')
+      })
+    }
   }
 })
