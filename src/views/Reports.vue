@@ -30,19 +30,19 @@
                 <div class="content-budget-line">
                   <small> Total Expenses </small>
                   <ion-text :color="this.expenses[line.id] > line.amount ? 'danger' : ''">
-                    {{ toPeso(this.expenses[line.id]) }}
+                    {{ toPeso(this.expenses[line.id] || 0) }}
                   </ion-text>
                 </div>
                 <span v-if="this.expenses[line.id] > line.amount">
                   <div class="content-budget-line">
                     <small>Over Budget</small>
-                    <ion-text color='danger'> ({{toPeso(line.amount - this.expenses[line.id] * -1)}}) </ion-text>
+                    <ion-text color='danger'> ({{toPeso((line.amount - (this.expenses[line.id] || 0)) * -1)}}) </ion-text>
                   </div>
                 </span>
                 <span v-else>
                   <div class="content-budget-line">
                     <small>Consumable</small>
-                    {{ toPeso(line.amount - this.expenses[line.id]) }}
+                    {{ toPeso(line.amount - (this.expenses[line.id] || 0)) }}
                   </div>
                 </span>
               </div>
