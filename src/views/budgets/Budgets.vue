@@ -26,7 +26,7 @@
               </div>
               <h1>{{ budget.name }}</h1>
               <div class="budget-lines">
-                <div class="budget-line" v-for="line in budget.budget_lines" :key="line.id">
+                <div class="budget-line" v-for="line in sortedLines(budget.budget_lines)" :key="line.id">
                   <span>{{ budgetCategoryName(line.category_id) }}</span>
                   <span>{{ toPeso(line.amount) }}</span>
                 </div>
@@ -45,7 +45,7 @@
 <script >
 import { IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
-import { findWhere } from 'underscore';
+import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter, dateFormatter } from '../../helper'
 
 export default  {
@@ -61,6 +61,10 @@ export default  {
     this.$store.dispatch('fetchBudgets', [])
   },
   methods: {
+    sortedLines: function (lines) {
+      const self = this
+      return sortBy(lines, function (line) { return self.budgetCategoryName(line.category_id) })
+    },
     toPeso: function (num) {
       return pesoFormatter().format(num)
     },
