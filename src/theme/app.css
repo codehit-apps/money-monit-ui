@@ -150,3 +150,9 @@
 .text-right {
   text-align: right;
 }
+.decoration-none {
+  text-decoration: none;
+}
+.decoration-none:hover {
+  text-decoration: none;
+}
