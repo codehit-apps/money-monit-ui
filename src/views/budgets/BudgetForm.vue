@@ -46,7 +46,7 @@
           <b> Budget Items</b>
         </h2>
       </ion-item>
-      <ion-item v-for="line in this.$store.state.budget.budget_lines" :key="line.id" :router-link="`/budgets/${this.$store.state.budget.id}/items/${line.id}/edit`">
+      <ion-item v-for="line in sortedLines" :key="line.id" :router-link="`/budgets/${this.$store.state.budget.id}/items/${line.id}/edit`">
         <ion-label>
           <ion-text class="ion-float-left">  {{ budgetCategoryName(line.category_id) }} </ion-text>
           <ion-text class="ion-float-right"> {{ toPeso(line.amount) }} </ion-text>
@@ -74,7 +74,7 @@
 <script >
 import { toastController, IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle, addCircleOutline } from 'ionicons/icons';
-import { findWhere } from 'underscore';
+import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter } from '../../helper'
 
 export default  {
@@ -126,6 +126,10 @@ export default  {
       set (value) {
         this.$store.commit('setBudgetActive', value)
       }
+    },
+    sortedLines: function () {
+      const self = this
+      return sortBy(self.$store.state.budget.budget_lines, function (line) { return self.budgetCategoryName(line.category_id) })
     },
   },
   methods: {

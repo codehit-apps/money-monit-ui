@@ -644,7 +644,7 @@ export default createStore({
       const [budgetId, budgetLineId] = opts
       const { state } = context
       if (state.budgets.length) {
-        let item = state.budgets.find((item) => { return item.id == budgetId })
+        let item = state.budgets.find((item) => { return item.id == budgetId }) || {}
         context.commit('setBudget', item)
         const lines = item.budget_lines || []
         const line = lines.find((item) => { return item.id == budgetLineId }) || {}
