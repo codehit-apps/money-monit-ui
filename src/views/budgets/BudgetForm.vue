@@ -41,7 +41,7 @@
         <ion-text color="danger" v-for="error in errors['active']" :key="error">{{ error }}</ion-text>
       </div>
 
-      <ion-item>
+      <ion-item v-if="budgetPersisted">
         <h2>
           <b> Budget Items</b>
         </h2>
@@ -53,7 +53,7 @@
         </ion-label>
       </ion-item>
 
-      <ion-item>
+      <ion-item v-if="budgetPersisted">
         <ion-label class="ion-text-right">
           <ion-button color="secondary" @click="this.$router.push({path: `/budgets/${this.$store.state.budget.id}/items/new`})">
             <ion-icon :icon="addCircleOutline"/>
@@ -63,7 +63,7 @@
       </ion-item>
 
       <div class="action-end ion-padding">
-        <ion-button type="button" v-if="this.$route.params.id != null"  class="ion-margin-end" @click="copyBudget" color="tertiary">Copy</ion-button>
+        <ion-button type="button" v-if="budgetPersisted"  class="ion-margin-end" @click="copyBudget" color="tertiary">Copy</ion-button>
         <ion-text class="ion-margin-end" @click="this.$router.push({path: '/budgets'})" >Cancel</ion-text>
         <ion-button type="submit" @click="saveBudget" color="primary">Save</ion-button>
       </div> 
@@ -95,6 +95,9 @@ export default  {
     }
   },
   computed: {
+    budgetPersisted: function () {
+      return this.$route.params.id != null
+    },
     name: {
       get () {
         return this.$store.state.budget.name
