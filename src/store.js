@@ -25,8 +25,12 @@ export default createStore({
     budget: {},
     currentUser: {},
     budget_line: {},
+    transactionsNextPage: 1,
   },
   mutations: {
+    setTransactionsNextPage (state, value) {
+      state.transactionsNextPage = value
+    },
     setBudgetLine (state, value) {
       state.budget_line = value
     },
@@ -439,10 +443,11 @@ export default createStore({
       })
     },
     fetchTransactions (context, opts) {
-      const [query] = opts
+      const {state} = context
+      const [query, onSuccess] = opts
+      query['page'] = state.transactionsNextPage
       let params = ''
       if (query != null) {
-        console.log('query', query)
         params = Object.keys(query).map(function(key){ 
           return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
         }).join('&')
@@ -454,8 +459,10 @@ export default createStore({
         headers: apiHeaders('TRANSACTIONS')
       })
       .then(resp => resp.json())
-      .then(function(items) {
-        context.commit('setTransactions', items)
+      .then(function(resp) {
+        context.commit('setTransactions', state.transactions.concat(resp.items))
+        context.commit('setTransactionsNextPage', resp.next_page)
+        if (onSuccess != undefined) onSuccess()
       })
       .finally(function () {
         context.commit('hideLoader', 'fetchTransactions')

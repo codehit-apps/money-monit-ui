@@ -57,19 +57,23 @@
           </ion-item-sliding>
         </ion-list>
       </div>
+      <ion-infinite-scroll threshold="100px" id="txns-infinite-scroll" v-on:ionInfinite="loadTransactions">
+        <ion-infinite-scroll-content loading-spinner="crescent">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
     </ion-content>
   </ion-page>
 </template>
 
 <script >
-import { IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
+import { IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
 import { addCircle, arrowForwardOutline } from 'ionicons/icons';
 import { findWhere, isUndefined, isNull, groupBy, pluck } from 'underscore';
 import { txnManager, pesoFormatter, dateFormatter } from '../../helper'
 
 export default  {
   name: 'Banks',
-  components: { IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
+  components: { IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
   setup() {
     return {
       addCircle,
@@ -86,6 +90,13 @@ export default  {
     this.$store.dispatch('fetchCategories')
   },
   methods: {
+    loadTransactions: function () {
+      const onSuccess = function () {
+        const infiniteScroll = document.getElementById('txns-infinite-scroll')
+        infiniteScroll.complete()
+      }
+      this.$store.dispatch('fetchTransactions', [this.$route.query, onSuccess])
+    },
     deleteTransaction: function (transactionId) {
       const self = this
       const success = function () {
