@@ -75,7 +75,6 @@ export default  {
           ]
         })
       return alert.present()
-
     },
   }
 }

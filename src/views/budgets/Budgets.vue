@@ -71,15 +71,32 @@ export default  {
     formatDate: function (date) {
       return dateFormatter().format(new Date(date))
     },
-    deleteBudget: function (userId) {
+    deleteBudget: async function (userId) {
       const self = this
-      const success = function () {
-        self.$store.dispatch('fetchBudgets', [])
-      }
-      const error = function (err) {
-        console.log(err)
-      }
-      this.$store.dispatch('deleteBudget', [userId, success, error])
+      const alert = await alertController
+        .create({
+          header: 'Are you sure?',
+          message: 'Please click Confirm to delete this budget.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                const success = function () {
+                  self.$store.dispatch('fetchBudgets', [])
+                }
+                const error = function (err) {
+                  console.log(err)
+                }
+                self.$store.dispatch('deleteBudget', [userId, success, error])
+              }
+            }
+          ]
+        })
+      return alert.present()
     },
     budgetCategory: function (category_id) {
       return findWhere(this.$store.state.categories, {id: category_id}) || {}
