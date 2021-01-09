@@ -19,24 +19,42 @@
               </div>
             </ion-card-content>
           </ion-card>
-          <ion-card class="icon-cell reports" router-link="/reports">
-            <ion-icon :icon="barChart"/>
-          </ion-card>
-          <ion-card class="icon-cell transactions" router-link="/transactions">
-            <ion-icon :icon="cash"/>
-          </ion-card>
-          <ion-card class="icon-cell banks" router-link="/banks">
-            <ion-icon :icon="briefcaseOutline"/>
-          </ion-card>
-          <ion-card class="icon-cell budgets" router-link="/budgets">
-            <ion-icon :icon="wallet"/>
-          </ion-card>
-          <ion-card class="icon-cell categories" router-link="/categories">
-            <ion-icon :icon="albumsOutline"/>
-          </ion-card>
-          <ion-card class="icon-cell users" router-link="/users" v-if="this.$store.state.currentUser.admin">
-            <ion-icon :icon="peopleCircleOutline"/>
-          </ion-card>
+          <div class="text-center">
+            <ion-card class="icon-cell reports" router-link="/reports">
+              <ion-icon :icon="barChart"/>
+            </ion-card>
+            <small>Reports</small>
+          </div>
+          <div class="text-center">
+            <ion-card class="icon-cell transactions" router-link="/transactions">
+              <ion-icon :icon="cash"/>
+            </ion-card>
+            <small>Transactions</small>
+          </div>
+          <div class="text-center">
+            <ion-card class="icon-cell banks" router-link="/banks">
+              <ion-icon :icon="briefcaseOutline"/>
+            </ion-card>
+            <small>Banks</small>
+          </div>
+          <div class="text-center">
+            <ion-card class="icon-cell budgets" router-link="/budgets">
+              <ion-icon :icon="wallet"/>
+            </ion-card>
+            <small>Budgets</small>
+          </div>
+          <div class="text-center">
+            <ion-card class="icon-cell categories" router-link="/categories">
+              <ion-icon :icon="albumsOutline"/>
+            </ion-card>
+            <small>Categories</small>
+          </div>
+          <div class="text-center">
+            <ion-card class="icon-cell users" router-link="/users" v-if="this.$store.state.currentUser.admin">
+              <ion-icon :icon="peopleCircleOutline"/>
+            </ion-card>
+            <small>Users</small>
+          </div>
         </div>
       </div>
     </ion-content>
