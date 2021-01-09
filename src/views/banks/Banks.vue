@@ -34,7 +34,7 @@
 </template>
 
 <script >
-import { IonItemOption, IonText, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonItemOption, IonText, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 
 export default  {
@@ -49,15 +49,33 @@ export default  {
     this.$store.dispatch('fetchBankAccounts')
   },
   methods: {
-    deleteBankAccount: function (bankAccountId) {
+    deleteBankAccount: async function (bankAccountId) {
       const self = this
-      const success = function () {
-        self.$store.dispatch('fetchBankAccounts')
-      }
-      const error = function (err) {
-        console.log(err)
-      }
-      this.$store.dispatch('deleteBankAccount', [bankAccountId, success, error])
+      const alert = await alertController
+        .create({
+          header: 'Are you sure?',
+          message: 'Please click Confirm to delete this bank account.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                const success = function () {
+                  self.$store.dispatch('fetchBankAccounts')
+                }
+                const error = function (err) {
+                  console.log(err)
+                }
+                self.$store.dispatch('deleteBankAccount', [bankAccountId, success, error])
+              }
+            }
+          ]
+        })
+      return alert.present()
+
     },
   }
 }
