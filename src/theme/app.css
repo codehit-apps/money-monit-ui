@@ -122,12 +122,18 @@
 .select-interface-option.dark {
   color: #222428;
 }
+.d-flex {
+  display: flex;
+}
 .d-flex-center {
   display: flex;
   align-items: center;
 }
 .content-end {
   justify-content: flex-end;
+}
+.content-between {
+  justify-content: space-between;
 }
 .flex-column {
   flex-direction: column;

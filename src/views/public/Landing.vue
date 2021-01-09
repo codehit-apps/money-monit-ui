@@ -110,11 +110,11 @@
 <script>
 
 import Footer from '@/components/Footer.vue'
-import { IonPage, IonContent, IonRouterLink } from '@ionic/vue'
+import { IonPage, IonContent } from '@ionic/vue'
 
 export default {
   name: 'moneyMonit',
-  components: {Footer, IonPage, IonContent, IonRouterLink},
+  components: {Footer, IonPage, IonContent},
 }
 </script>
 

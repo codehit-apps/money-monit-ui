@@ -94,7 +94,7 @@
       <div class="action-end ion-padding">
         <ion-text class="ion-margin-end" @click="this.$router.push({path: '/transactions'})" >Cancel</ion-text>
         <ion-button type="submit"  @click="saveTransaction" color="primary">Save</ion-button>
-      </div> 
+      </div>
     </ion-content>
   </ion-page>
 </template>
