@@ -66,7 +66,7 @@
 </template>
 
 <script >
-import { IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
+import { alertController, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
 import { addCircle, arrowForwardOutline } from 'ionicons/icons';
 import { findWhere, isUndefined, isNull, groupBy, pluck } from 'underscore';
 import { txnManager, pesoFormatter, dateFormatter } from '../../helper'
@@ -98,15 +98,32 @@ export default  {
       }
       this.$store.dispatch('fetchTransactions', [this.$route.query, onSuccess])
     },
-    deleteTransaction: function (transactionId) {
+    deleteTransaction: async function (transactionId) {
       const self = this
-      const success = function () {
-        self.$store.dispatch('fetchTransactions', [])
-      }
-      const error = function (err) {
-        console.log(err)
-      }
-      this.$store.dispatch('deleteTransaction', [transactionId, success, error])
+      const alert = await alertController
+        .create({
+          header: 'Are you sure?',
+          message: 'Please click Confirm to delete this transaction.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                const success = function () {
+                  self.$store.dispatch('fetchTransactions', [])
+                }
+                const error = function (err) {
+                  console.log(err)
+                }
+                self.$store.dispatch('deleteTransaction', [transactionId, success, error])
+              }
+            }
+          ]
+        })
+      return alert.present()
     },
     txnCategory: function (txn) {
       return findWhere(this.$store.state.categories, {id: txn.category_id}) || {}

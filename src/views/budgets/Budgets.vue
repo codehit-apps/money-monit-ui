@@ -43,7 +43,7 @@
 </template>
 
 <script >
-import { IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter, dateFormatter } from '../../helper'

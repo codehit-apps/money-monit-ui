@@ -32,7 +32,7 @@
 </template>
 
 <script >
-import { IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 
 export default  {
@@ -47,15 +47,32 @@ export default  {
     this.$store.dispatch('fetchUsers')
   },
   methods: {
-    deleteUser: function (userId) {
+    deleteUser: async function (userId) {
       const self = this
-      const success = function () {
-        self.$store.dispatch('fetchUsers')
-      }
-      const error = function (err) {
-        console.log(err)
-      }
-      this.$store.dispatch('deleteUser', [userId, success, error])
+      const alert = await alertController
+        .create({
+          header: 'Are you sure?',
+          message: 'Please click Confirm to delete this user.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                const success = function () {
+                  self.$store.dispatch('fetchUsers')
+                }
+                const error = function (err) {
+                  console.log(err)
+                }
+                self.$store.dispatch('deleteUser', [userId, success, error])
+              }
+            }
+          ]
+        })
+      return alert.present()
     },
     userName: function (user) {
       return [user.first_name, user.last_name].join(' ')

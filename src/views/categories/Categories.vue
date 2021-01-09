@@ -32,7 +32,7 @@
 </template>
 
 <script >
-import { IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 
 export default  {
@@ -47,15 +47,32 @@ export default  {
     this.$store.dispatch('fetchCategories')
   },
   methods: {
-    deleteCategory: function (categoryId) {
+    deleteCategory: async function (categoryId) {
       const self = this
-      const success = function () {
-        self.$store.dispatch('fetchCategories')
-      }
-      const error = function (err) {
-        console.log(err)
-      }
-      this.$store.dispatch('deleteCategory', [categoryId, success, error])
+      const alert = await alertController
+        .create({
+          header: 'Are you sure?',
+          message: 'Please click Confirm to delete this category.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                const success = function () {
+                  self.$store.dispatch('fetchCategories')
+                }
+                const error = function (err) {
+                  console.log(err)
+                }
+                self.$store.dispatch('deleteCategory', [categoryId, success, error])
+              }
+            }
+          ]
+        })
+      return alert.present()
     },
   }
 }
