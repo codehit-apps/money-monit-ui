@@ -25,7 +25,7 @@
               <div class="txn-line">
                 <div class="txn-data">
                   <div>
-                    {{ txnDescription(txn) }}
+                    {{ txnDescription(txn) || txnType(txn) }}
                     <small class="d-block">{{ txnCategoryName(txn) }}</small>
                   </div>
                     <div class="ion-text-right d-flex-center" v-if="txn.type == 'Transfer'">
@@ -88,6 +88,7 @@ export default  {
     this.$store.dispatch('fetchTransactions', [this.$route.query])
     this.$store.dispatch('fetchBankAccounts')
     this.$store.dispatch('fetchCategories')
+    this.$store.dispatch('fetchTransactionTypes')
   },
   methods: {
     loadTransactions: function () {
@@ -120,6 +121,9 @@ export default  {
     txnCategoryName: function (txn) {
       if (this.isTxnDescriptionMissing(txn)) return this.txnCategory(txn).description
       return this.txnCategory(txn).name
+    },
+    txnType: function (txn) {
+      return this.$store.state.transactionTypes[txn.type] || ''
     },
     txnBank: function (txn) {
       return findWhere(this.$store.state.bankAccounts, {id: txn.bank_account_id}) || {}
