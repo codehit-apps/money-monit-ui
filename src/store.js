@@ -445,9 +445,9 @@ export default createStore({
     fetchTransactions (context, opts) {
       const {state} = context
       const [query, onSuccess] = opts
-      query['page'] = state.transactionsNextPage
       let params = ''
       if (query != null) {
+        query['page'] = state.transactionsNextPage
         params = Object.keys(query).map(function(key){ 
           return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
         }).join('&')
