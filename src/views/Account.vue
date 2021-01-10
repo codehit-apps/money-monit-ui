@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-list class="ion-margin-end">
-        <ion-item>
+        <ion-item :router-link="`/users/${this.$store.state.currentUser.id}/edit`">
           <ion-icon :icon="personCircle" class="ion-margin-end"/>
           <ion-label>
             <h2>{{ this.$store.state.currentUser.name }}</h2>

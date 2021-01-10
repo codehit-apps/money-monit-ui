@@ -49,8 +49,8 @@
             </ion-card>
             <small>Categories</small>
           </div>
-          <div class="text-center">
-            <ion-card class="icon-cell users" router-link="/users" v-if="this.$store.state.currentUser.admin">
+          <div class="text-center" v-if="this.$store.state.currentUser.admin">
+            <ion-card class="icon-cell users" router-link="/users">
               <ion-icon :icon="peopleCircleOutline"/>
             </ion-card>
             <small>Users</small>

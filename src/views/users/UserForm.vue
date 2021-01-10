@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="warning">
          <ion-buttons slot="start">
-          <ion-back-button defaultHref="/users"></ion-back-button>
+          <ion-back-button :defaultHref="userRedirect()"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">User Info</ion-title>
       </ion-toolbar>
@@ -100,6 +100,9 @@ export default  {
     },
   },
   methods: {
+    userRedirect: function () {
+      return this.$store.state.currentUser.admin ? '/users' : '/account'
+    },
     async showAlert(message, color) {
       const alert = await toastController
         .create({
@@ -125,7 +128,7 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
-          self.$router.push({path: '/users'})
+          self.$router.push({path: self.userRedirect()})
         }
       }
       const error = function (err) {
@@ -142,7 +145,7 @@ export default  {
           console.log(resp.errors)
         } else {
           self.$store.dispatch('fetchUsers')
-          self.$router.push({path: '/users'})
+          self.$router.push({path: self.userRedirect()})
         }
       }
       const error = function (err) {
