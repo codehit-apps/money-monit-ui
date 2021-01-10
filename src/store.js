@@ -648,6 +648,19 @@ export default createStore({
         context.commit('hideLoader', 'deleteBudget')
       })
     },
+    deleteBudgetLine (context, opts) {
+      const [budgetId, lineId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteBudgetLine')
+      fetch(api(`/v1/budgets/${budgetId}/budget_lines/${lineId}`), {
+        method: "DELETE",
+        headers: apiHeaders('BUDGETS'),
+      })
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteBudgetLine')
+      })
+    },
     fetchBudgetLine (context, opts) {
       const [budgetId, budgetLineId] = opts
       const { state } = context

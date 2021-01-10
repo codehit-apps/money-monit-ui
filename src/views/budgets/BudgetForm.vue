@@ -46,12 +46,19 @@
           <b> Budget Items</b>
         </h2>
       </ion-item>
-      <ion-item v-for="line in sortedLines" :key="line.id" :router-link="`/budgets/${this.$store.state.budget.id}/items/${line.id}/edit`">
-        <ion-label>
-          <ion-text class="ion-float-left">  {{ budgetCategoryName(line.category_id) }} </ion-text>
-          <ion-text class="ion-float-right"> {{ toPeso(line.amount) }} </ion-text>
-        </ion-label>
-      </ion-item>
+      <ion-list>
+        <ion-item-sliding v-for="line in sortedLines" :key="line.id">
+          <ion-item :router-link="`/budgets/${this.$store.state.budget.id}/items/${line.id}/edit`">
+            <ion-label>
+              <ion-text class="ion-float-left">  {{ budgetCategoryName(line.category_id) }} </ion-text>
+              <ion-text class="ion-float-right"> {{ toPeso(line.amount) }} </ion-text>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" @click="deleteBudgetLine(line)">Delete</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
 
       <ion-item v-if="budgetPersisted">
         <ion-label class="ion-text-right">
@@ -72,14 +79,14 @@
 </template>
 
 <script >
-import { toastController, IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, toastController, IonList, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle, addCircleOutline } from 'ionicons/icons';
 import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter } from '../../helper'
 
 export default  {
   name: 'Budgets',
-  components: { IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
+  components: { IonList, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
@@ -213,6 +220,33 @@ export default  {
     budgetCategoryName: function (category_id) {
       return this.budgetCategory(category_id).name
     },
+    deleteBudgetLine: async function (line) {
+      const self = this
+      const alert = await alertController
+        .create({
+          header: 'Are you sure?',
+          message: 'Please click Confirm to delete this item.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                const success = function () {
+                  self.$store.dispatch('reloadBudget', self.$route.params.id)
+                }
+                const error = function (err) {
+                  console.log(err)
+                }
+                self.$store.dispatch('deleteBudgetLine', [line.budget_id, line.id, success, error])
+              }
+            }
+          ]
+        })
+      return alert.present()
+    }
   },
   watch: {
     $route() {
