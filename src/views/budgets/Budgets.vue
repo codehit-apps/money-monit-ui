@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="success">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/home"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Budgets</ion-title>
         <ion-buttons slot="end">

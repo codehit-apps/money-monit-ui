@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="warning">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/users"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">User Info</ion-title>
       </ion-toolbar>
@@ -38,7 +38,7 @@
         <ion-text color="danger" v-for="error in errors['password']" :key="error">{{ error }}</ion-text>
       </div>
       <div class="action-end ion-padding">
-        <ion-text class="ion-margin-end" @click="this.$router.push({path: '/users'})" >Cancel</ion-text>
+        <!-- <ion-text class="ion-margin-end" @click="this.$router.push({path: '/users'})" >Cancel</ion-text> -->
         <ion-button type="submit" @click="saveUser" color="primary">Save</ion-button>
       </div> 
     </ion-content>

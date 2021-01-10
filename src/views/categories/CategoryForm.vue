@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="medium">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/categories"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Category Info</ion-title>
       </ion-toolbar>
@@ -21,7 +21,7 @@
         <ion-input v-model="description"></ion-input>
       </ion-item>
       <div class="action-end ion-padding">
-        <ion-text class="ion-margin-end" @click="this.$router.push({path: '/categories'})" >Cancel</ion-text>
+        <!-- <ion-text class="ion-margin-end" @click="this.$router.push({path: '/categories'})" >Cancel</ion-text> -->
         <ion-button type="submit" @click="saveCategory" color="primary">Save</ion-button>
       </div> 
     </ion-content>

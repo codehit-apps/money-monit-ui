@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="success">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/budgets"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Budget Info</ion-title>
       </ion-toolbar>
@@ -64,7 +64,7 @@
 
       <div class="action-end ion-padding">
         <ion-button type="button" v-if="budgetPersisted"  class="ion-margin-end" @click="copyBudget" color="tertiary">Copy</ion-button>
-        <ion-text class="ion-margin-end" @click="this.$router.push({path: '/budgets'})" >Cancel</ion-text>
+        <!-- <ion-text class="ion-margin-end" @click="this.$router.push({path: '/budgets'})" >Cancel</ion-text> -->
         <ion-button type="submit" @click="saveBudget" color="primary">Save</ion-button>
       </div> 
     </ion-content>

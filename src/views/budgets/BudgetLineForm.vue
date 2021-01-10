@@ -4,7 +4,7 @@
     <ion-header>
       <ion-toolbar color="success">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/budgets"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Budget item info</ion-title>
       </ion-toolbar>
@@ -30,7 +30,7 @@
       </div>
 
       <div class="action-end ion-padding">
-        <ion-text class="ion-margin-end" @click="this.$router.push({path: `/budgets/${this.$route.params.budget_id}/edit`})" >Cancel</ion-text>
+        <!-- <ion-text class="ion-margin-end" @click="this.$router.push({path: `/budgets/${this.$route.params.budget_id}/edit`})" >Cancel</ion-text> -->
         <ion-button type="submit" @click="saveBudgetLine" color="primary">Save</ion-button>
       </div> 
     </ion-content>

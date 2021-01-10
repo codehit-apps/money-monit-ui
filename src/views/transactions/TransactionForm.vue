@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="danger">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/transactions"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Transaction Info</ion-title>
       </ion-toolbar>
@@ -92,7 +92,7 @@
       </div>
 
       <div class="action-end ion-padding">
-        <ion-text class="ion-margin-end" @click="this.$router.push({path: '/transactions'})" >Cancel</ion-text>
+        <!-- <ion-text class="ion-margin-end" @click="this.$router.push({path: '/transactions'})" >Cancel</ion-text> -->
         <ion-button type="submit"  @click="saveTransaction" color="primary">Save</ion-button>
       </div>
     </ion-content>

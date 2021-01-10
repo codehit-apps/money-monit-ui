@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="primary">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/banks"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Bank Info</ion-title>
       </ion-toolbar>
@@ -27,7 +27,7 @@
         </ion-select>
       </ion-item>
       <div class="action-end ion-padding">
-        <ion-text class="ion-margin-end" @click="this.$router.push({path: '/banks'})" >Cancel</ion-text>
+        <!-- <ion-text class="ion-margin-end" @click="this.$router.push({path: '/banks'})" >Cancel</ion-text> -->
         <ion-button type="submit" @click="saveBankAccount" color="primary">Save</ion-button>
       </div> 
     </ion-content>
