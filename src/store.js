@@ -444,7 +444,7 @@ export default createStore({
     },
     fetchTransactions (context, opts) {
       const {state} = context
-      const [query, onSuccess] = opts
+      const [query, onSuccess, appendResult] = opts
       let params = ''
       if (query != null) {
         query['page'] = state.transactionsNextPage
@@ -460,7 +460,11 @@ export default createStore({
       })
       .then(resp => resp.json())
       .then(function(resp) {
-        context.commit('setTransactions', state.transactions.concat(resp.items))
+        let result = resp.items
+        if (appendResult != null && appendResult) {
+          result = state.transactions.concat(result)
+        }
+        context.commit('setTransactions', result)
         context.commit('setTransactionsNextPage', resp.next_page)
         if (onSuccess != undefined) onSuccess()
       })

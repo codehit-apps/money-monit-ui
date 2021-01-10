@@ -96,7 +96,8 @@ export default  {
         const infiniteScroll = document.getElementById('txns-infinite-scroll')
         infiniteScroll.complete()
       }
-      this.$store.dispatch('fetchTransactions', [this.$route.query, onSuccess])
+      const appendResult = true
+      this.$store.dispatch('fetchTransactions', [this.$route.query, onSuccess, appendResult])
     },
     deleteTransaction: async function (transactionId) {
       const self = this
