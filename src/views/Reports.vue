@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar color="tertiary">
          <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button defaultHref="/home"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Reports</ion-title>
       </ion-toolbar>
