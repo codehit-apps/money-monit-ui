@@ -102,9 +102,3 @@ export default  {
   }
 }
 </script>
-
-<style>
-  ion-content::part(background) {
-    background-color: #edf2f9;
-  }
-</style>
