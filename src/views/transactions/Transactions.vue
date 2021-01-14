@@ -85,6 +85,7 @@ export default  {
     }
   },
   created: function () {
+    this.$store.commit('setTransactionsNextPage', 1)
     this.$store.dispatch('fetchTransactions', [this.$route.query])
     this.$store.dispatch('fetchBankAccounts')
     this.$store.dispatch('fetchCategories')
