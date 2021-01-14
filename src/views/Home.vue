@@ -122,6 +122,11 @@ export default  {
         self.$store.commit('hideLoader', 'fetchBalances')
       })
     }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.path == '/home') this.fetchBalances()
+    }
   }
 }
 </script>
