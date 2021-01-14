@@ -43,11 +43,11 @@
 </template>
 
 <script>
-import {IonGrid, IonRow, IonCol, IonText, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonItem, IonLabel, IonInput} from '@ionic/vue';
+import {IonPage, IonContent, IonGrid, IonRow, IonCol, IonText, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonItem, IonLabel, IonInput} from '@ionic/vue';
 import { isAuthenticated } from '../../helper'
 
 export default {
-  components: {IonGrid, IonRow, IonCol, IonText, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonItem, IonLabel, IonInput},
+  components: {IonPage, IonContent, IonGrid, IonRow, IonCol, IonText, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonItem, IonLabel, IonInput},
   name: 'Login',
   data: function () {
     return {
