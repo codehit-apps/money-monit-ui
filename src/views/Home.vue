@@ -6,7 +6,7 @@
           <ion-card class="mini-report">
             <ion-card-header>
               <ion-card-subtitle>Current Balance</ion-card-subtitle>
-              <ion-card-title>{{ toPeso(currentBalance()) }}</ion-card-title>
+              <ion-card-title>{{ toPeso(currentBalance) }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <div class="balance-group">
@@ -14,7 +14,7 @@
                   <div class="source">
                     <ion-text :color="bankAccount.color">{{ bankAccount.name }}</ion-text>
                   </div>
-                  <div class="amount">{{ toPeso(accountBalance(bankAccount)) }}</div>
+                  <div class="amount">{{ toPeso(accountBalance[bankAccount.id] || 0) }}</div>
                 </div>
               </div>
             </ion-card-content>
@@ -64,7 +64,7 @@
 <script >
 import { IonText, IonIcon, IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/vue';
 import { barChart, briefcaseOutline, cash, briefcase, wallet, albumsOutline, peopleCircleOutline } from 'ionicons/icons';
-import { txnManager, pesoFormatter } from '../helper'
+import { txnManager, pesoFormatter, api, apiHeaders } from '../helper'
 
 export default  {
   name: 'Home',
@@ -80,24 +80,47 @@ export default  {
       briefcaseOutline
     }
   },
+  data: function () {
+    return {
+      accountBalance: {},
+      currentBalance: 0,
+    }
+  },
   created: function () {
     this.$store.dispatch('fetchCurrentUser')
     this.$store.dispatch('fetchTransactions', [])
     this.$store.dispatch('fetchBankAccounts')
+    this.fetchBalances()
   },
   methods: {
     toPeso: function (num) {
       return pesoFormatter().format(num)
     },
-    accountBalance: function (bankAccount) {
-      txnManager.setTxns(this.$store.state.transactions)
-      txnManager.setBankAccountId(bankAccount.id)
-      return txnManager.getAccountBalance()
-    },
-    currentBalance: function () {
-      txnManager.setTxns(this.$store.state.transactions)
-      txnManager.setBankAccountId(null)
-      return txnManager.getAccountBalance()
+    // accountBalance: function (bankAccount) {
+    //   txnManager.setTxns(this.$store.state.transactions)
+    //   txnManager.setBankAccountId(bankAccount.id)
+    //   return txnManager.getAccountBalance()
+    // },
+    // currentBalance: function () {
+    //   txnManager.setTxns(this.$store.state.transactions)
+    //   txnManager.setBankAccountId(null)
+    //   return txnManager.getAccountBalance()
+    // },
+    fetchBalances: function () {
+      const self = this
+      self.$store.commit('hideLoader', 'fetchBalances')
+      fetch(api(`/v1/balances`), {
+        method: 'GET',
+        headers: apiHeaders('TRANSACTIONS')
+      })
+      .then(resp => resp.json())
+      .then(function(data) {
+        self.currentBalance = data.current
+        self.accountBalance = data.banks
+      })
+      .finally(function () {
+        self.$store.commit('hideLoader', 'fetchBalances')
+      })
     }
   }
 }
