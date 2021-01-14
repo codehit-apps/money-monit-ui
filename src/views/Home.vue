@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" id="home">
       <div class="cells-container">
         <div class="icon-cells">
           <ion-card class="mini-report">
@@ -19,37 +19,37 @@
               </div>
             </ion-card-content>
           </ion-card>
-          <div class="text-center">
+          <div class="text-center cell-wrapper">
             <ion-card class="icon-cell reports" router-link="/reports">
               <ion-icon :icon="barChart"/>
             </ion-card>
             <small>Reports</small>
           </div>
-          <div class="text-center">
+          <div class="text-center cell-wrapper">
             <ion-card class="icon-cell transactions" router-link="/transactions">
               <ion-icon :icon="cash"/>
             </ion-card>
             <small>Transactions</small>
           </div>
-          <div class="text-center">
+          <div class="text-center cell-wrapper">
             <ion-card class="icon-cell banks" router-link="/banks">
               <ion-icon :icon="briefcaseOutline"/>
             </ion-card>
             <small>Banks</small>
           </div>
-          <div class="text-center">
+          <div class="text-center cell-wrapper">
             <ion-card class="icon-cell budgets" router-link="/budgets">
               <ion-icon :icon="wallet"/>
             </ion-card>
             <small>Budgets</small>
           </div>
-          <div class="text-center">
+          <div class="text-center cell-wrapper">
             <ion-card class="icon-cell categories" router-link="/categories">
               <ion-icon :icon="albumsOutline"/>
             </ion-card>
             <small>Categories</small>
           </div>
-          <div class="text-center" v-if="this.$store.state.currentUser.admin">
+          <div class="text-center cell-wrapper" v-if="this.$store.state.currentUser.admin">
             <ion-card class="icon-cell users" router-link="/users">
               <ion-icon :icon="peopleCircleOutline"/>
             </ion-card>
@@ -130,3 +130,12 @@ export default  {
   }
 }
 </script>
+
+<style>
+#home::part(background) {
+  background-image: linear-gradient( 135deg, #72EDF2 10%, #5151E5 100%);
+}
+.cell-wrapper small{
+  color: #fefefe;
+}
+</style>
