@@ -30,15 +30,15 @@
                   </div>
                     <div class="ion-text-right d-flex-center" v-if="txn.type == 'Transfer'">
                       <div class="">
-                        <ion-text class="mb-5 d-block">-{{toPeso(parseFloat(txn.amount) + parseFloat(txn.fee))}}</ion-text>
+                        <ion-text class="d-block">-{{toPeso(parseFloat(txn.amount) + parseFloat(txn.fee))}}</ion-text>
                         <ion-chip class="m-0 ion-color" :color="txnBank(txn).color" outline="">{{ txnBank(txn).name }}</ion-chip>
                       </div>
-                      <div class="d-flex-center flex-column content-end mx-5">
+                      <div class="d-flex-center flex-column content-end mx-1">
                         <ion-text class="mb-12" color="danger">-{{ toPeso(parseFloat(txn.fee)) }}</ion-text>
                         <ion-icon slot="icon-only" :icon="arrowForwardOutline"/>
                       </div>
                       <div class="">
-                        <ion-text class="mb-5 d-block">+{{toPeso(txn.amount)}}</ion-text>
+                        <ion-text class="d-block">+{{toPeso(txn.amount)}}</ion-text>
                         <ion-chip class="m-0 ion-color" :color="txnToBank(txn).color" outline="">{{ txnToBank(txn).name }}</ion-chip>
                       </div>
                   </div>
