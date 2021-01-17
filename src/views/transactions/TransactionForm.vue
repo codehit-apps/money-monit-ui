@@ -238,8 +238,8 @@ export default  {
     initForm: function () {
       this.$store.dispatch('fetchTransaction', this.$route.params.id)
       this.$store.dispatch('fetchTransactionTypes')
-      this.$store.dispatch('fetchBankAccounts')
-      this.$store.dispatch('fetchCategories')
+      this.$store.dispatch('fetchBankAccounts', [])
+      this.$store.dispatch('fetchCategories', [])
       if (this.type == null) this.$store.commit('setTransactionType', 'Withdraw')
       if (this.datetime == null) this.$store.commit('setTransactionDatetime', (new Date().toISOString()))
     }

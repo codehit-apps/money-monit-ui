@@ -132,7 +132,7 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
-          self.$store.dispatch('fetchBankAccounts')
+          self.$store.dispatch('fetchBankAccounts', [])
           self.$router.push({path: '/banks'})
         }
       }

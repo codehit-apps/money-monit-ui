@@ -75,18 +75,22 @@ const routes = [
       },
       {
         path: '/budgets/new',
+        name: 'NewBudget',
         component: () => import('@/views/budgets/BudgetForm.vue')
       },
       {
         path: '/budgets/:id/edit',
+        name: 'EditBudget',
         component: () => import('@/views/budgets/BudgetForm.vue')
       },
       {
-        path: '/budgets/:budget_id/items/new',
+        path: '/budget_items/:budget_id/new',
+        name: 'NewBudgetLine',
         component: () => import('@/views/budgets/BudgetLineForm.vue')
       },
       {
-        path: '/budgets/:budget_id/items/:id/edit',
+        path: '/budget_items/:budget_id/:id/edit',
+        name: 'EditBudgetLine',
         component: () => import('@/views/budgets/BudgetLineForm.vue')
       },
       { 

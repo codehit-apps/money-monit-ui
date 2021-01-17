@@ -14,6 +14,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
+      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <ion-list>
         <ion-item-sliding v-for="category in this.$store.state.categories" :key="category.id">
           <ion-item :router-link="`/categories/${category.id}/edit`">
@@ -32,21 +35,28 @@
 </template>
 
 <script >
-import { alertController, IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonRefresher, IonRefresherContent, IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 
 export default  {
   name: 'Categories',
-  components: { IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
+  components: { IonRefresher, IonRefresherContent, IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
     }
   },
   created: function () {
-    this.$store.dispatch('fetchCategories')
+    this.$store.dispatch('fetchCategories', [])
   },
   methods: {
+    doRefresh: function (event) {
+      const self = this
+      const onSuccess = function () {
+        event.target.complete()
+      }
+      self.$store.dispatch('fetchCategories', [onSuccess, {'_recache': 0}])
+    },
     deleteCategory: async function (categoryId) {
       const self = this
       const alert = await alertController
@@ -62,7 +72,7 @@ export default  {
               text: 'Confirm',
               handler: () => {
                 const success = function () {
-                  self.$store.dispatch('fetchCategories')
+                  self.$store.dispatch('fetchCategories', [])
                 }
                 const error = function (err) {
                   console.log(err)

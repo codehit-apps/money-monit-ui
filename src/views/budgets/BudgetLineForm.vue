@@ -108,14 +108,15 @@ export default  {
       this.$store.dispatch('saveBudgetLine', [success, error])
     },
     initForm: function () {
-      if (this.$route.params.budget_id == null) return false
-      this.$store.dispatch('fetchBudgetLine', [this.$route.params.budget_id, this.$route.params.id])
-      this.$store.dispatch('fetchCategories')
+      const budgetId = this.$route.params.budget_id
+      if (budgetId == null) return false
+      this.$store.dispatch('fetchBudgetLine', [budgetId, this.$route.params.id])
+      this.$store.dispatch('fetchCategories', [])
     },
   },
   watch: {
-    $route() {
-      this.initForm()
+    $route(to, from) {
+      if (to.name == 'NewBudgetLine' || to.name == 'EditBudgetLine') this.initForm()
     }
   }
 }

@@ -144,7 +144,7 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
-          self.$store.dispatch('fetchUsers')
+          self.$store.dispatch('fetchUsers', [])
           self.$router.push({path: self.userRedirect()})
         }
       }

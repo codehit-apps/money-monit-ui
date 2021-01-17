@@ -183,15 +183,24 @@ export default createStore({
         context.commit('hideLoader', 'fetchCurrentUser')
       })
     },
-    fetchCategories (context) {
+    fetchCategories (context, opts) {
+      const [onSuccess, query] = opts
+      let params = ''
+      if (query != null) {
+        params = Object.keys(query).map(function(key){ 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
+        }).join('&')
+      }
+      const apiUrl = params == '' ? '/v1/categories' : `/v1/categories?${params}`
       context.commit('showLoader', 'fetchCategories')
-      fetch(api('/v1/categories'), {
+      fetch(api(apiUrl), {
         method: "GET",
         headers: apiHeaders('CATEGORIES')
       })
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setCategories', items)
+        if (onSuccess != null) onSuccess()
       }).finally(function () {
         context.commit('hideLoader', 'fetchCategories')
       })
@@ -268,15 +277,24 @@ export default createStore({
         context.commit('hideLoader', 'deleteCategory')
       })
     },
-    fetchBankAccounts (context) {
+    fetchBankAccounts (context, opts) {
+      const [onSuccess, query] = opts
+      let params = ''
+      if (query != null) {
+        params = Object.keys(query).map(function(key){ 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
+        }).join('&')
+      }
+      const apiUrl = params == '' ? '/v1/bank_accounts' : `/v1/bank_accounts?${params}`
       context.commit('showLoader', 'fetchBankAccounts')
-      fetch(api('/v1/bank_accounts'), {
+      fetch(api(apiUrl), {
         method: "GET",
         headers: apiHeaders('BANK_ACCOUNTS')
       })
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setBankAccounts', items)
+        if(onSuccess != null) onSuccess()
       })
       .finally(function () {
         context.commit('hideLoader', 'fetchBankAccounts')
@@ -355,15 +373,24 @@ export default createStore({
         context.commit('hideLoader', 'deleteBankAccount')
       })
     },
-    fetchUsers (context) {
+    fetchUsers (context, opts) {
+      const [onSuccess, query] = opts
+      let params = ''
+      if (query != null) {
+        params = Object.keys(query).map(function(key){ 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
+        }).join('&')
+      }
+      const apiUrl = params == '' ? '/v1/users' : `/v1/users?${params}`
       context.commit('showLoader', 'fetchUsers')
-      fetch(api('/v1/users'), {
+      fetch(api(apiUrl), {
         method: "GET",
         headers: apiHeaders('USERS')
       })
       .then(resp => resp.json())
       .then(function(items) {
         context.commit('setUsers', items)
+        if (onSuccess != null) onSuccess()
       })
       .finally(function () {
         context.commit('hideLoader', 'fetchUsers')
@@ -560,9 +587,16 @@ export default createStore({
       })
     },
     fetchBudgets (context, opts) {
-      const [onSuccess] = opts
+      const [onSuccess, query] = opts
+      let params = ''
+      if (query != null) {
+        params = Object.keys(query).map(function(key){ 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
+        }).join('&')
+      }
+      const apiUrl = params == '' ? '/v1/budgets' : `/v1/budgets?${params}`
       context.commit('showLoader', 'fetchBudgets')
-      fetch(api('/v1/budgets'), {
+      fetch(api(apiUrl), {
         method: "GET",
         headers: apiHeaders('BUDGETS')
       })

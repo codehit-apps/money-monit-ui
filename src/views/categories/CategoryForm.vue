@@ -107,7 +107,7 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
-          self.$store.dispatch('fetchCategories')
+          self.$store.dispatch('fetchCategories', [])
           self.$router.push({path: '/categories'})
         }
       }

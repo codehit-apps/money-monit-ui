@@ -14,6 +14,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
+      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <ion-list>
         <ion-item-sliding v-for="user in this.$store.state.users" :key="user.id">
           <ion-item :router-link="`/users/${user.id}/edit`">
@@ -32,21 +35,28 @@
 </template>
 
 <script >
-import { alertController, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonRefresher, IonRefresherContent, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 
 export default  {
   name: 'Banks',
-  components: { IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
+  components: { IonRefresher, IonRefresherContent, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
     }
   },
   created: function () {
-    this.$store.dispatch('fetchUsers')
+    this.$store.dispatch('fetchUsers', [])
   },
   methods: {
+    doRefresh: function (event) {
+      const self = this
+      const onSuccess = function () {
+        event.target.complete()
+      }
+      self.$store.dispatch('fetchUsers', [onSuccess, {'_recache': 0}])
+    },
     deleteUser: async function (userId) {
       const self = this
       const alert = await alertController
@@ -62,7 +72,7 @@ export default  {
               text: 'Confirm',
               handler: () => {
                 const success = function () {
-                  self.$store.dispatch('fetchUsers')
+                  self.$store.dispatch('fetchUsers', [])
                 }
                 const error = function (err) {
                   console.log(err)

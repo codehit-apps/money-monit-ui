@@ -14,6 +14,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <div class="txn-group" v-for="(value, key) in groupedTxns()" :key="key">
         <div class="txn-data">
           <div class="fw-500">{{formatDate(key)}}</div>
@@ -66,14 +69,14 @@
 </template>
 
 <script >
-import { alertController, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
+import { alertController, IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
 import { addCircle, arrowForwardOutline } from 'ionicons/icons';
 import { findWhere, isUndefined, isNull, groupBy, pluck } from 'underscore';
 import { txnManager, pesoFormatter, dateFormatter } from '../../helper'
 
 export default  {
   name: 'Banks',
-  components: { IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
+  components: { IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
   setup() {
     return {
       addCircle,
@@ -87,11 +90,19 @@ export default  {
   created: function () {
     this.$store.commit('setTransactionsNextPage', 1)
     this.$store.dispatch('fetchTransactions', [this.$route.query])
-    this.$store.dispatch('fetchBankAccounts')
-    this.$store.dispatch('fetchCategories')
+    this.$store.dispatch('fetchBankAccounts', [])
+    this.$store.dispatch('fetchCategories', [])
     this.$store.dispatch('fetchTransactionTypes')
   },
   methods: {
+    doRefresh: function (event) {
+      const self = this
+      self.$store.commit('setTransactionsNextPage', 1)
+      const onSuccess = function () {
+        event.target.complete()
+      }
+      self.$store.dispatch('fetchTransactions', [{'_recache': 0}, onSuccess])
+    },
     loadTransactions: function () {
       const onSuccess = function () {
         const infiniteScroll = document.getElementById('txns-infinite-scroll')

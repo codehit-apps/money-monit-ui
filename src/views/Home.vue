@@ -89,7 +89,7 @@ export default  {
   created: function () {
     this.$store.dispatch('fetchCurrentUser')
     this.$store.dispatch('fetchTransactions', [])
-    this.$store.dispatch('fetchBankAccounts')
+    this.$store.dispatch('fetchBankAccounts', [])
     this.fetchBalances()
   },
   methods: {

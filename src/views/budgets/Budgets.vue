@@ -14,6 +14,9 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
+      <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+      </ion-refresher>
       <ion-list>
         <ion-item-sliding v-for="budget in this.$store.state.budgets" :key="budget.id">
           <ion-item :router-link="`/budgets/${budget.id}/edit`">
@@ -43,21 +46,21 @@
 </template>
 
 <script >
-import { alertController, IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
+import { alertController, IonRefresher, IonRefresherContent, IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel } from '@ionic/vue';
 import { addCircle } from 'ionicons/icons';
 import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter, dateFormatter } from '../../helper'
 
 export default  {
   name: 'Budget',
-  components: { IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
+  components: { IonRefresher, IonRefresherContent, IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {
       addCircle,
     }
   },
   created: function () {
-    this.$store.dispatch('fetchCategories')
+    this.$store.dispatch('fetchCategories', [])
     this.$store.dispatch('fetchBudgets', [])
   },
   methods: {
@@ -69,6 +72,7 @@ export default  {
       return pesoFormatter().format(num)
     },
     formatDate: function (date) {
+      if (date == null) return null
       return dateFormatter().format(new Date(date))
     },
     deleteBudget: async function (userId) {
@@ -104,6 +108,18 @@ export default  {
     budgetCategoryName: function (category_id) {
       return this.budgetCategory(category_id).name
     },
+    doRefresh: function (event) {
+      const self = this
+      const onSuccess = function () {
+        event.target.complete()
+      }
+      self.$store.dispatch('fetchBudgets', [onSuccess, {'_recache': 0}])
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name == 'NewBudget') this.$store.dispatch('fetchBudget', null)
+    }
   }
 }
 </script>

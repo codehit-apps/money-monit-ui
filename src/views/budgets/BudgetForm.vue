@@ -48,7 +48,7 @@
       </ion-item>
       <ion-list>
         <ion-item-sliding v-for="line in sortedLines" :key="line.id">
-          <ion-item :router-link="`/budgets/${this.$store.state.budget.id}/items/${line.id}/edit`">
+          <ion-item :router-link="`/budget_items/${this.$store.state.budget.id}/${line.id}/edit`">
             <ion-label>
               <ion-text class="ion-float-left">  {{ budgetCategoryName(line.category_id) }} </ion-text>
               <ion-text class="ion-float-right"> {{ toPeso(line.amount) }} </ion-text>
@@ -62,7 +62,7 @@
 
       <ion-item v-if="budgetPersisted">
         <ion-label class="ion-text-right">
-          <ion-button color="secondary" @click="this.$router.push({path: `/budgets/${this.$store.state.budget.id}/items/new`})">
+          <ion-button color="secondary" @click="this.$router.push({path: `/budget_items/${this.$store.state.budget.id}/new`})">
             <ion-icon :icon="addCircleOutline"/>
             &nbsp; Line
           </ion-button>
@@ -211,8 +211,10 @@ export default  {
       this.$store.dispatch('createBudget', [success, error])
     },
     initForm: function () {
-      this.$store.dispatch('reloadBudget', this.$route.params.id)
-      this.$store.dispatch('fetchCategories')
+      const budgetId = this.$route.params.id
+      if (budgetId == null) return false
+      this.$store.dispatch('reloadBudget', budgetId)
+      this.$store.dispatch('fetchCategories', [])
     },
     budgetCategory: function (category_id) {
       return findWhere(this.$store.state.categories, {id: category_id}) || {}
@@ -249,8 +251,8 @@ export default  {
     }
   },
   watch: {
-    $route() {
-      this.initForm()
+    $route(to, from) {
+      if (to.name == 'EditBudget' || to.name == 'NewBudget') this.initForm()
     }
   }
 }

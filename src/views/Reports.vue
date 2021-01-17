@@ -136,7 +136,7 @@ export default  {
   },
   created: function () {
     const self = this
-    self.$store.dispatch('fetchCategories')
+    self.$store.dispatch('fetchCategories', [])
     const onFetchBudgetsSuccess = function () {
       self.fetchExpenses()
     }
@@ -180,8 +180,8 @@ export default  {
     },
     initForm: function () {
       this.$store.dispatch('fetchTransactionTypes')
-      this.$store.dispatch('fetchBankAccounts')
-      this.$store.dispatch('fetchCategories')
+      this.$store.dispatch('fetchBankAccounts', [])
+      this.$store.dispatch('fetchCategories', [])
       this.filter.from_date.setDate(1)
       this.filter.from_date = this.filter.from_date.toISOString()
       this.filter.to_date = this.filter.to_date.toISOString()
