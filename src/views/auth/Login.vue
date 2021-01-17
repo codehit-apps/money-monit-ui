@@ -1,15 +1,19 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" id="auth">
       <ion-grid>
+        <a href="/" class="back-to-home">
+          <small>back to home</small>
+        </a>
         <ion-row class="ion-align-items-center ion-justify-content-center">
           <ion-col class="ion-margin-vertical" size-md="6" size-lg="4">
             <ion-text class="ion-text-center">
-              <h1><a href="/" class="decoration-none">moneyMonit</a></h1>
+              <h1>
+                </h1>
             </ion-text>
             <ion-card class="ion-margin-bottom">
               <ion-card-header>
-                <ion-card-title class="ion-text-center"> Sign In</ion-card-title>
+                <ion-card-title class="ion-text-center"> My Account</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <div class="ion-margin-bottom ion-text-center" v-if="error != null">
@@ -75,4 +79,14 @@ export default {
 </script>
 
 <style>
+#auth::part(background) {
+  background-image: linear-gradient( 135deg, #72EDF2 10%, #5151E5 100%);
+}
+#auth a {
+  text-decoration: none;
+  color: inherit;
+}
+.back-to-home {
+  margin-left: 20px;
+}
 </style>

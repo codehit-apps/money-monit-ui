@@ -7,7 +7,7 @@
             <div class="col-sm pt-5">
               <div class="pt-5">
                 <h1>moneyMonit</h1>
-                <p contenteditable="false">Simple expenses & balance tracker accross bank accounts.</p>
+                <p contenteditable="false">Simple expenses & balance tracker across accounts.</p>
                 <ion-router-link href="/#/login" target="_self" class="btn btn-outline-secondary">My Account</ion-router-link>
               </div>
             </div>
@@ -68,33 +68,6 @@
                 <a href="/assets/img/moneymonit/5.png" data-fancybox="moneymonit-images">
                   <div style="overflow:hidden;height:130px;" class="text-center">
                     <img src="/assets/img/moneymonit/5.png" alt="" class="img-fluid">
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
-              <div class="img-thumbnail mb-3">
-                <a href="/assets/img/moneymonit/6.png" data-fancybox="moneymonit-images">
-                  <div style="overflow:hidden;height:130px;" class="text-center">
-                    <img src="/assets/img/moneymonit/6.png" alt="" class="img-fluid">
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
-              <div class="img-thumbnail mb-3">
-                <a href="/assets/img/moneymonit/7.png" data-fancybox="moneymonit-images">
-                  <div style="overflow:hidden;height:130px;" class="text-center">
-                    <img src="/assets/img/moneymonit/7.png" alt="" class="img-fluid">
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
-              <div class="img-thumbnail mb-3">
-                <a href="/assets/img/moneymonit/8.png" data-fancybox="moneymonit-images">
-                  <div style="overflow:hidden;height:130px;" class="text-center">
-                    <img src="/assets/img/moneymonit/8.png" alt="" class="img-fluid">
                   </div>
                 </a>
               </div>
