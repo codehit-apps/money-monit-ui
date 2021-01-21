@@ -23,6 +23,9 @@ export default createStore({
     user: {},
     budgets: [],
     budget: {},
+    debts: [],
+    debt: {},
+    debt_payment: {},
     currentUser: {},
     budget_line: {},
     transactionsNextPage: 1,
@@ -39,6 +42,18 @@ export default createStore({
     },
     setBudgetLineAmount (state, value) {
       state.budget_line.amount = value
+    },
+    setPaymentLinePaidAt (state, value) {
+      state.debt_payment.paid_at = value
+    },
+    setPaymentLineNotes (state, value) {
+      state.debt_payment.notes = value
+    },
+    setPaymentLineAmount (state, value) {
+      state.debt_payment.amount = value
+    },
+    setPaymentLine (state, value) {
+      state.debt_payment = value
     },
     setCategories (state, items) {
       state.categories = items
@@ -72,6 +87,12 @@ export default createStore({
     },
     setBudgets (state, items) {
       state.budgets = items
+    },
+    setDebts (state, items) {
+      state.debts = items
+    },
+    setDebt (state, item) {
+      state.debt = item
     },
     setBudgetName (state, value) {
       state.budget.name = value
@@ -141,6 +162,18 @@ export default createStore({
     },
     setUserPassword (state, value) {
       state.user.password = value
+    },
+    setDebtDebtorId (state, value) {
+      state.debt.debtor_id = value
+    },
+    setDebtCreditorId (state, value) {
+      state.debt.creditor_id = value
+    },
+    setDebtAmount (state, value) {
+      state.debt.amount = value
+    },
+    setDebtDebitedAt (state, value) {
+      state.debt.debited_at = value
     },
     hideLoader (state, ref) {
       state._loadingLog[ref] = false
@@ -275,6 +308,197 @@ export default createStore({
       .catch(onError)
       .finally(function () {
         context.commit('hideLoader', 'deleteCategory')
+      })
+    },
+    fetchDebts (context, opts) {
+      const [onSuccess, query] = opts
+      let params = ''
+      if (query != null) {
+        params = Object.keys(query).map(function(key){ 
+          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
+        }).join('&')
+      }
+      const apiUrl = params == '' ? '/v1/debts' : `/v1/debts?${params}`
+      context.commit('showLoader', 'fetchDebts')
+      fetch(api(apiUrl), {
+        method: "GET",
+        headers: apiHeaders('DEBTS')
+      })
+      .then(resp => resp.json())
+      .then(function(items) {
+        context.commit('setDebts', items)
+        if(onSuccess != null) onSuccess()
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchDebts')
+      })
+    },
+    fetchDebt (context, debtId) {
+      if (!debtId){
+        context.commit('setDebt', {})
+        return false
+      }
+      const { state } = context
+      if (state.debts.length) {
+        let item = state.debts.find((item) => { return item.id == debtId })
+        context.commit('setDebt', item)
+      } else {
+        context.dispatch('reloadDebt', debtId)
+      }
+    },
+    updateDebt (context, opts) {
+      const { state } = context
+      const [onSuccess, onError] = opts
+      context.commit('showLoader', 'updateDebt')
+      fetch(api(`/v1/debts/${state.debt.id}`), {
+        method: "PUT",
+        headers: apiHeaders('DEBTS'),
+        body: JSON.stringify({
+          debt: state.debt
+        })
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'updateDebt')
+      })
+    },
+    createDebt (context, opts) {
+      const { state } = context
+      const [onSuccess, onError] = opts
+      context.commit('showLoader', 'createDebt')
+      fetch(api(`/v1/debts`), {
+        method: "POST",
+        headers: apiHeaders('DEBTS'),
+        body: JSON.stringify({
+          debt: state.debt
+        })
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'createDebt')
+      })
+    },
+    deleteDebt (context, opts) {
+      const [debtId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteDebt')
+      fetch(api(`/v1/debts/${debtId}`), {
+        method: "DELETE",
+        headers: apiHeaders('DEBTS'),
+      })
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteDebt')
+      })
+    },
+    savePaymentLine (context, opts) {
+      const { state } = context
+      const [onSuccess, onError] = opts
+      context.commit('showLoader', 'savePaymentLine')
+      const debt = state.debt
+      if (debt.debt_payments == null) {
+        debt.debt_payments = []
+      }
+      if (state.debt_payment != {}) {
+        debt.debt_payments.push(state.debt_payment)
+      }
+      fetch(api(`/v1/debts/${state.debt.id}`), {
+        method: "PUT",
+        headers: apiHeaders('DEBTS'),
+        body: JSON.stringify({
+          debt: debt
+        })
+      })
+      .then(resp => resp.json())
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'savePaymentLine')
+      })
+    },
+    fetchPaymentLine (context, opts) {
+      const [debtId, paymentLineId] = opts
+      const { state } = context
+      if (state.debts.length) {
+        let item = state.debts.find((item) => { return item.id == debtId }) || {}
+        context.commit('setDebt', item)
+        const lines = item.debt_payments || []
+        const line = lines.find((item) => { return item.id == paymentLineId }) || {}
+        context.commit('setPaymentLine', line)
+      } else {
+        context.commit('showLoader', 'fetchDebt')
+        fetch(api(`/v1/debts/${debtId}`), {
+          method: "GET",
+          headers: apiHeaders('DEBTS')
+        })
+        .then(resp => resp.json())
+        .then(function(item) {
+          context.commit('setDebt', item)
+          const lines = item.debt_payments || []
+          const line = lines.find((item) => { return item.id == paymentLineId }) || {}
+          context.commit('setPaymentLine', line)
+        })
+        .finally(function () {
+          context.commit('hideLoader', 'fetchDebt')
+        })
+      }
+    },
+    deleteDebtLine (context, opts) {
+      const [debtId, lineId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deleteDebtLine')
+      fetch(api(`/v1/debts/${debtId}/debt_payments/${lineId}`), {
+        method: "DELETE",
+        headers: apiHeaders('DEBTS'),
+      })
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deleteDebtLine')
+      })
+    },
+    reloadDebt (context, debtId) {
+      if (debtId == null) return false
+      context.commit('showLoader', 'reloadDebt')
+      fetch(api(`/v1/debts/${debtId}`), {
+        method: "GET",
+        headers: apiHeaders('DEBTS')
+      })
+      .then(resp => resp.json())
+      .then(function(item) {
+        context.commit('setDebt', item)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'reloadDebt')
+      })
+    },
+    deletePaymentLine (context, opts) {
+      const [debtId, lineId, onSuccess, onError] = opts
+      context.commit('showLoader', 'deletePaymentLine')
+      fetch(api(`/v1/debts/${debtId}/debt_payments/${lineId}`), {
+        method: "DELETE",
+        headers: apiHeaders('DEBTS'),
+      })
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'deletePaymentLine')
+      })
+    },
+    acceptPayment (context, opts) {
+      const [debtId, lineId, onSuccess, onError] = opts
+      context.commit('showLoader', 'acceptPayment')
+      fetch(api(`/v1/debts/${debtId}/debt_payments/${lineId}/approve`), {
+        method: "POST",
+        headers: apiHeaders('DEBTS'),
+      })
+      .then(onSuccess)
+      .catch(onError)
+      .finally(function () {
+        context.commit('hideLoader', 'acceptPayment')
       })
     },
     fetchBankAccounts (context, opts) {

@@ -21,37 +21,43 @@
           </ion-card>
           <div class="text-center cell-wrapper">
             <ion-card class="icon-cell reports" router-link="/reports">
-              <ion-icon :icon="barChart"/>
+              <ion-icon :icon="barChartOutline"/>
             </ion-card>
             <small>Reports</small>
           </div>
           <div class="text-center cell-wrapper">
             <ion-card class="icon-cell transactions" router-link="/transactions">
-              <ion-icon :icon="cash"/>
+              <ion-icon :icon="newspaperOutline"/>
             </ion-card>
             <small>Transactions</small>
           </div>
           <div class="text-center cell-wrapper">
-            <ion-card class="icon-cell banks" router-link="/banks">
-              <ion-icon :icon="briefcaseOutline"/>
+            <ion-card class="icon-cell debts" router-link="/debts">
+              <ion-icon :icon="cashOutline"/>
             </ion-card>
-            <small>Banks</small>
+            <small>Debts</small>
           </div>
           <div class="text-center cell-wrapper">
             <ion-card class="icon-cell budgets" router-link="/budgets">
-              <ion-icon :icon="wallet"/>
+              <ion-icon :icon="walletOutline"/>
             </ion-card>
             <small>Budgets</small>
           </div>
           <div class="text-center cell-wrapper">
+            <ion-card class="icon-cell banks" router-link="/banks">
+              <ion-icon :icon="folderOutline"/>
+            </ion-card>
+            <small>Banks</small>
+          </div>
+          <div class="text-center cell-wrapper">
             <ion-card class="icon-cell categories" router-link="/categories">
-              <ion-icon :icon="albumsOutline"/>
+              <ion-icon :icon="pricetagsOutline"/>
             </ion-card>
             <small>Categories</small>
           </div>
           <div class="text-center cell-wrapper" v-if="this.$store.state.currentUser.admin">
             <ion-card class="icon-cell users" router-link="/users">
-              <ion-icon :icon="peopleCircleOutline"/>
+              <ion-icon :icon="peopleOutline"/>
             </ion-card>
             <small>Users</small>
           </div>
@@ -63,7 +69,7 @@
 
 <script >
 import { IonText, IonIcon, IonPage, IonContent, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from '@ionic/vue';
-import { barChart, briefcaseOutline, cash, briefcase, wallet, albumsOutline, peopleCircleOutline } from 'ionicons/icons';
+import { newspaperOutline, cardOutline, barChartOutline, folderOutline, cashOutline, briefcase, walletOutline, pricetagsOutline, peopleOutline } from 'ionicons/icons';
 import { txnManager, pesoFormatter, api, apiHeaders } from '../helper'
 
 export default  {
@@ -71,13 +77,15 @@ export default  {
   components: {IonText, IonIcon, IonContent, IonPage, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent },
   setup() {
     return {
-      barChart,
-      cash,
+      newspaperOutline,
+      cardOutline,
+      barChartOutline,
+      cashOutline,
       briefcase,
-      wallet,
-      albumsOutline,
-      peopleCircleOutline,
-      briefcaseOutline
+      walletOutline,
+      pricetagsOutline,
+      peopleOutline,
+      folderOutline
     }
   },
   data: function () {

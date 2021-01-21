@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header>
-      <ion-toolbar color="danger">
+      <ion-toolbar color="medium">
          <ion-buttons slot="start">
           <ion-back-button defaultHref="/transactions"></ion-back-button>
         </ion-buttons>

@@ -70,6 +70,28 @@ const routes = [
         component: () => import('@/views/banks/BankForm.vue')
       },
       { 
+        path: '/debts',
+        component: () => import('@/views/debts/Debts.vue')
+      },
+      { 
+        path: '/debts/new',
+        component: () => import('@/views/debts/DebtForm.vue')
+      },
+      { 
+        path: '/debts/:id/edit',
+        component: () => import('@/views/debts/DebtForm.vue')
+      },
+      {
+        path: '/debt_payments/:debt_id/new',
+        name: 'NewPaymentLine',
+        component: () => import('@/views/debts/PaymentLineForm.vue')
+      },
+      {
+        path: '/debt_payments/:debt_id/:id/edit',
+        name: 'EditPaymentLine',
+        component: () => import('@/views/debts/PaymentLineForm.vue')
+      },
+      { 
       path: '/budgets',
         component: () => import('@/views/budgets/Budgets.vue')
       },

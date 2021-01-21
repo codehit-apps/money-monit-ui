@@ -28,6 +28,11 @@
   background: var(--ion-color-medium);
 }
 .icon-cell.transactions {
+  border-top: 1px solid var(--ion-color-medium-tint);
+  border-bottom: 2px solid var(--ion-color-medium-shade);
+  background: var(--ion-color-medium);
+}
+.icon-cell.debts {
   border-top: 1px solid var(--ion-color-danger-tint);
   border-bottom: 2px solid var(--ion-color-danger-shade);
   background: var(--ion-color-danger);
@@ -51,6 +56,11 @@
   border-top: 1px solid var(--ion-color-warning-tint);
   border-bottom: 2px solid var(--ion-color-warning-shade);
   background: var(--ion-color-warning);
+}
+.icon-cell.categories {
+  border-top: 1px solid var(--ion-color-secondary-tint);
+  border-bottom: 2px solid var(--ion-color-secondary-shade);
+  background: var(--ion-color-secondary);
 }
 .mini-report {
   flex-basis: 100%;
@@ -162,4 +172,12 @@
 }
 .decoration-none:hover {
   text-decoration: none;
+}
+
+.record-lines .record-line {
+  display: flex;
+  justify-content: space-between;
+}
+.w-full {
+  width: 100%;
 }
