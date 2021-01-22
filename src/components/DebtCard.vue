@@ -30,6 +30,10 @@
           <div class="label">Pending Payments</div>
           <div class="value"><ion-badge v-if="pendingPaymentCount > 0" color="danger">{{ pendingPaymentCount }}</ion-badge></div>
         </div>
+        <div class="record-line">
+          <div class="label">Notes</div>
+          <div class="value">{{debt.notes}}</div>
+        </div>
       </div>
     </ion-card-content>
   </ion-card>

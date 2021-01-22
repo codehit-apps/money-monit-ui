@@ -46,6 +46,15 @@
         <ion-text color="danger" v-for="error in errors['debited_at']" :key="error">{{ error }}</ion-text>
       </div>
 
+      <ion-item>
+        <ion-label position="floating"> Notes </ion-label>
+        <ion-input v-model="notes">
+        </ion-input>
+      </ion-item>
+      <div v-if="!!errors['notes']" class="ion-margin-bottom ion-margin-start">
+        <ion-text color="danger" v-for="error in errors['notes']" :key="error">{{ error }}</ion-text>
+      </div>
+
       <!-- <ion-item v-if="debtPersisted" lines="none">
       </ion-item> -->
       <div class="record-lines ion-margin-start ion-margin-end ion-margin-top" v-if="debtPersisted">
@@ -159,6 +168,14 @@ export default  {
     },
     debtPersisted: function () {
       return this.$route.params.id != null
+    },
+    notes: {
+      get () {
+        return this.$store.state.debt.notes
+      },
+      set (value) {
+        this.$store.commit('setDebtNotes', value)
+      }
     },
     debited_at: {
       get () {

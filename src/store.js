@@ -169,6 +169,9 @@ export default createStore({
     setDebtCreditorId (state, value) {
       state.debt.creditor_id = value
     },
+    setDebtNotes (state, value) {
+      state.debt.notes = value
+    },
     setDebtAmount (state, value) {
       state.debt.amount = value
     },
