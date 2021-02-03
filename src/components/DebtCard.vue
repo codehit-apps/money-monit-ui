@@ -2,6 +2,10 @@
   <ion-card class="w-full">
     <ion-card-content>
       <div class="record-lines">
+        <div class="record-line">
+          <div class="label">Reference #</div>
+          <div class="value">{{formatId(debt.id)}}</div>
+        </div>
         <div class="record-line" v-if="isRecievable" >
           <div class="label">Debtor</div>
           <div class="value">{{userName(debt.debtor_id)}}</div>
@@ -26,6 +30,10 @@
           <div class="label">{{ dateLabel }}</div>
           <div class="value">{{formatDate(debt.debited_at)}}</div>
         </div>
+        <div class="record-line" v-if="debt.paid_at">
+          <div class="label">Paid At</div>
+          <div class="value">{{formatDate(debt.paid_at)}}</div>
+        </div>
         <div class="record-line">
           <div class="label">Pending Payments</div>
           <div class="value"><ion-badge v-if="pendingPaymentCount > 0" color="danger">{{ pendingPaymentCount }}</ion-badge></div>
@@ -41,7 +49,7 @@
 
 <script>
 import { findWhere, each } from 'underscore';
-import { pesoFormatter, dateFormatter } from '../helper'
+import { pesoFormatter, dateFormatter, pad } from '../helper'
 import { IonCard, IonCardContent, IonBadge } from '@ionic/vue';
 
 export default {
@@ -70,6 +78,9 @@ export default {
     }
   },
   methods: {
+    formatId: function (num) {
+      return pad(num)
+    },
     formatDate: function (date) {
       if (date == null) return null
       return dateFormatter().format(new Date(date))

@@ -56,3 +56,8 @@ export const apiHeaders = function(appScope) {
   headers.append('Content-Type', 'application/json')
   return headers
 }
+
+export const pad = function (num) {
+  var s = '0000' + num;
+  return s.substr(s.length-4);
+}

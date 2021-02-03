@@ -53,6 +53,26 @@
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>
+
+      <ion-list v-if="paid.length">
+        <ion-list-header lines="inset" class="ion-margin-top">
+          <div class="record-lines w-full ion-padding-end">
+            <div class="record-line">
+              <h6>Paid</h6>
+              <span></span>
+            </div>
+          </div>
+        </ion-list-header>
+        <ion-item-sliding v-for="debt in paid" :key="debt.id">
+          <ion-item lines="none" :router-link="`/debts/${debt.id}/edit`">
+            <DebtCard :debt="debt" mode="payable"/>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" @click="deleteDebt(debt.id)">Delete</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+
     </ion-content>
   </ion-page>
 </template>
@@ -77,14 +97,19 @@ export default  {
     this.$store.dispatch('fetchDebts', [])
   },
   computed: {
+    paid: {
+      get () {
+        return where(this.$store.state.debts, {paid: true})
+      }
+    },
     payables: {
       get () {
-        return where(this.$store.state.debts, {debtor_id: this.$store.state.currentUser.id})
+        return where(this.$store.state.debts, {paid: false, debtor_id: this.$store.state.currentUser.id})
       }
     },
     recievables: {
       get () {
-        return where(this.$store.state.debts, {creditor_id: this.$store.state.currentUser.id})
+        return where(this.$store.state.debts, {paid: false, creditor_id: this.$store.state.currentUser.id})
       }
     },
     recievablesTotal: {
