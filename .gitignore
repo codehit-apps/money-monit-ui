@@ -34,3 +34,4 @@ npm-debug.log*
 .env.production
 deploy.js
 dump.rdb
+!.env.example

@@ -1,0 +1,1 @@
+docker run -v ~/code/money-monit-ui:/money-monit-ui -p 8080:8080 --name money_monit_ui_box --rm -it money_monit_ui_box bash

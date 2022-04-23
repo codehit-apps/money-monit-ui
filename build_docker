@@ -1,0 +1,1 @@
+docker build -t money_monit_ui_box .
