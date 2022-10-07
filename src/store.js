@@ -119,10 +119,10 @@ export default createStore({
       state.transaction.type = value
     },
     setTransactionBankAccountId (state, value) {
-      state.transaction.bank_account_id = value
+      state.transaction.account_id = value
     },
     setTransactioToBankAccountId (state, value) {
-      state.transaction.to_bank_account_id = value
+      state.transaction.to_account_id = value
     },
     setTransactionDescription (state, value) {
       state.transaction.description = value

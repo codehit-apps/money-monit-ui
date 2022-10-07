@@ -5,9 +5,9 @@ const TRANSFER = 'Transfer'
 const DEPOSIT = 'Deposit'
 
 class TxnManager {
-  constructor (txns, bank_account_id) {
+  constructor (txns, account_id) {
     this.txns = txns
-    this.bank_account_id = null
+    this.account_id = account_id
   }
 
   setTxns (val) {
@@ -15,7 +15,7 @@ class TxnManager {
   }
 
   setBankAccountId (val) {
-    this.bank_account_id = val
+    this.account_id = val
   }
 
   getTotalExpenses () {
@@ -30,7 +30,7 @@ class TxnManager {
 
   _expenses () {
     let _txns = where(this.txns, {type: EXPENSE})
-    if (this.bank_account_id != null) _txns = where(_txns, {bank_account_id: this.bank_account_id})
+    if (this.account_id != null) _txns = where(_txns, {account_id: this.account_id})
     return _txns
   }
 
@@ -44,25 +44,25 @@ class TxnManager {
 
   _transfers () {
     let _txns = where(this.txns, {type: TRANSFER})
-    if (this.bank_account_id != null) _txns = where(_txns, {bank_account_id: this.bank_account_id})
+    if (this.account_id != null) _txns = where(_txns, {account_id: this.account_id})
     return _txns
   }
 
   _transfersIn () {
     let _txns = where(this.txns, {type: TRANSFER})
-    if (this.bank_account_id != null) _txns = where(_txns, {to_bank_account_id: this.bank_account_id})
+    if (this.account_id != null) _txns = where(_txns, {to_account_id: this.account_id})
     return _txns
   }
 
   _transfersOut () {
     let _txns = where(this.txns, {type: TRANSFER})
-    if (this.bank_account_id != null) _txns = where(_txns, {bank_account_id: this.bank_account_id})
+    if (this.account_id != null) _txns = where(_txns, {account_id: this.account_id})
     return _txns
   }
 
   _deposits () {
     let _txns = where(this.txns, {type: DEPOSIT})
-    if (this.bank_account_id != null) _txns = where(_txns, {bank_account_id: this.bank_account_id})
+    if (this.account_id != null) _txns = where(_txns, {account_id: this.account_id})
     return _txns
   }
 

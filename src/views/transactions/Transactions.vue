@@ -156,10 +156,10 @@ export default  {
       return this.$store.state.transactionTypes[txn.type] || ''
     },
     txnBank: function (txn) {
-      return findWhere(this.$store.state.bankAccounts, {id: txn.bank_account_id}) || {}
+      return findWhere(this.$store.state.bankAccounts, {id: txn.account_id}) || {}
     },
     txnToBank: function (txn) {
-      return findWhere(this.$store.state.bankAccounts, {id: txn.to_bank_account_id}) || {}
+      return findWhere(this.$store.state.bankAccounts, {id: txn.to_account_id}) || {}
     },
     groupedTxns: function () {
       return groupBy(this.$store.state.transactions, (item) => { return this.formatDate(item.datetime) })

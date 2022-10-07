@@ -32,32 +32,32 @@
       <div v-if="type == 'Transfer'">
         <ion-item>
           <ion-label position="floating"> Source Account </ion-label>
-          <ion-select placeholder="Select" v-model="bank_account_id" interface="action-sheet">
+          <ion-select placeholder="Select" v-model="account_id" interface="action-sheet">
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>
         </ion-item>
-        <div v-if="!!errors['bank_account_id']" class="ion-margin-bottom ion-margin-start">
-          <ion-text color="danger" v-for="error in errors['bank_account_id']" :key="error">{{ error }}</ion-text>
+        <div v-if="!!errors['account_id']" class="ion-margin-bottom ion-margin-start">
+          <ion-text color="danger" v-for="error in errors['account_id']" :key="error">{{ error }}</ion-text>
         </div>
         <ion-item>
           <ion-label position="floating"> Target Account </ion-label>
-          <ion-select placeholder="Select" v-model="to_bank_account_id" interface="action-sheet">
+          <ion-select placeholder="Select" v-model="to_account_id" interface="action-sheet">
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>
         </ion-item>
-        <div v-if="!!errors['to_bank_account_id']" class="ion-margin-bottom ion-margin-start">
-          <ion-text color="danger" v-for="error in errors['to_bank_account_id']" :key="error">{{ error }}</ion-text>
+        <div v-if="!!errors['to_account_id']" class="ion-margin-bottom ion-margin-start">
+          <ion-text color="danger" v-for="error in errors['to_account_id']" :key="error">{{ error }}</ion-text>
         </div>
       </div>
       <div v-else>
         <ion-item>
           <ion-label position="floating"> Account </ion-label>
-          <ion-select placeholder="Select" v-model="bank_account_id" interface="action-sheet">
+          <ion-select placeholder="Select" v-model="account_id" interface="action-sheet">
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>
         </ion-item>
-        <div v-if="!!errors['bank_account_id']" class="ion-margin-bottom ion-margin-start">
-          <ion-text color="danger" v-for="error in errors['bank_account_id']" :key="error">{{ error }}</ion-text>
+        <div v-if="!!errors['account_id']" class="ion-margin-bottom ion-margin-start">
+          <ion-text color="danger" v-for="error in errors['account_id']" :key="error">{{ error }}</ion-text>
         </div>
       </div>
 
@@ -128,9 +128,9 @@ export default  {
         this.$store.commit('setTransactionType', value)
       }
     },
-    bank_account_id: {
+    account_id: {
       get () {
-        return this.$store.state.transaction.bank_account_id
+        return this.$store.state.transaction.account_id
       },
       set (value) {
         this.$store.commit('setTransactionBankAccountId', value)
@@ -176,9 +176,9 @@ export default  {
         this.$store.commit('setTransactionCategoryId', value)
       }
     },
-    to_bank_account_id: {
+    to_account_id: {
       get () {
-        return this.$store.state.transaction.to_bank_account_id
+        return this.$store.state.transaction.to_account_id
       },
       set (value) {
         this.$store.commit('setTransactioToBankAccountId', value)

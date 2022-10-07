@@ -37,7 +37,7 @@
 
             <ion-item>
               <ion-label position="floating"> Account </ion-label>
-              <ion-select placeholder="Select" v-model="filter.bank_account_id" multiple>
+              <ion-select placeholder="Select" v-model="filter.account_id" multiple>
                 <ion-select-option value="">All</ion-select-option>
                 <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
               </ion-select>
@@ -54,7 +54,7 @@
             </ion-item>
 
             <div class="ion-padding-top content-between d-flex-center">
-              <a :href="`/#/transactions?q[category_id_in]=${filter.category_id}&q[datetime_gteq]=${filter.from_date}&q[datetime_lteq]=${filter.to_date}&q[type_in]=${filter.type}&q[bank_account_id_in]=${filter.bank_account_id}`" class="view-txns-link" target="_blank">view transactions</a>
+              <a :href="`/#/transactions?q[category_id_in]=${filter.category_id}&q[datetime_gteq]=${filter.from_date}&q[datetime_lteq]=${filter.to_date}&q[type_in]=${filter.type}&q[account_id_in]=${filter.account_id}`" class="view-txns-link" target="_blank">view transactions</a>
               <div class="d-flex-center">
                 <a href="javascript:void(0);" class="view-filters-link ion-margin-end" @click="this.showFilter=false">close</a>
                 <ion-button type="submit" class="ion-no-margin" @click="filterTransactions" color="primary">Filter</ion-button>
@@ -127,7 +127,7 @@ export default  {
       showFilter: false,
       filter: {
         type: 'Withdraw',
-        bank_account_id: '',
+        account_id: '',
         from_date: new Date(),
         to_date: new Date(),
         category_id: '',
@@ -190,7 +190,7 @@ export default  {
     filterTransactions: function () {
       const self = this
       self.$store.commit('showLoader', 'filterTransactions')
-      fetch(api(`/v1/transactions/total_expenses?q[category_id_in]=${self.filter.category_id}&q[datetime_gteq]=${self.filter.from_date}&q[datetime_lteq]=${self.filter.to_date}&q[type_in]=${self.filter.type}&q[bank_account_id_in]=${self.filter.bank_account_id}`), {
+      fetch(api(`/v1/transactions/total_expenses?q[category_id_in]=${self.filter.category_id}&q[datetime_gteq]=${self.filter.from_date}&q[datetime_lteq]=${self.filter.to_date}&q[type_in]=${self.filter.type}&q[account_id_in]=${self.filter.account_id}`), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
       })
