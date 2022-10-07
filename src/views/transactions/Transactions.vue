@@ -162,7 +162,7 @@ export default  {
       return findWhere(this.$store.state.bankAccounts, {id: txn.to_bank_account_id}) || {}
     },
     groupedTxns: function () {
-      return groupBy(this.$store.state.transactions, (item) => { return formatDate(item.datetime) })
+      return groupBy(this.$store.state.transactions, (item) => { return this.formatDate(item.datetime) })
     },
     txnsTotalExpenses: function (txns) {
       txnManager.setTxns(txns)
