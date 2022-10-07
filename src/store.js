@@ -716,7 +716,10 @@ export default createStore({
       .then(function(resp) {
         let result = resp.items
         if (appendResult != null && appendResult) {
-          result = state.transactions.concat(result)
+          result = {
+            ...state.transactions,
+            ...result
+          }
         }
         context.commit('setTransactions', result)
         context.commit('setTransactionsNextPage', resp.next_page)

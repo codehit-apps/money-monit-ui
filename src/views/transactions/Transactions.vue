@@ -17,13 +17,13 @@
       <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
-      <div class="txn-group" v-for="(value, key) in groupedTxns()" :key="key">
+      <div class="txn-group" v-for="(group, date) in this.$store.state.transactions" :key="date">
         <div class="txn-data">
-          <div class="fw-500">{{formatDate(key)}}</div>
-          <div class="fw-500">-{{toPeso(txnsTotalExpenses(value))}}</div>
+          <div class="fw-500">{{formatDate(date)}}</div>
+          <div class="fw-500">-{{toPeso(group.total)}}</div>
         </div>
         <ion-list>
-          <ion-item-sliding v-for="txn in value" :key="txn.id">
+          <ion-item-sliding v-for="txn in group.items" :key="txn.id">
             <ion-item :router-link="`/transactions/${txn.id}/edit`" lines="none">
               <div class="txn-line">
                 <div class="txn-data">
@@ -160,14 +160,6 @@ export default  {
     },
     txnToBank: function (txn) {
       return findWhere(this.$store.state.bankAccounts, {id: txn.to_account_id}) || {}
-    },
-    groupedTxns: function () {
-      return groupBy(this.$store.state.transactions, (item) => { return this.formatDate(item.datetime) })
-    },
-    txnsTotalExpenses: function (txns) {
-      txnManager.setTxns(txns)
-      txnManager.setBankAccountId(null)
-      return txnManager.getTotalExpenses()
     },
     toPeso: function (num) {
       return pesoFormatter().format(num)
