@@ -35,3 +35,4 @@ npm-debug.log*
 deploy.js
 dump.rdb
 !.env.example
+tmp/
