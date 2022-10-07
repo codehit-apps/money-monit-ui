@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-tabs>
+      <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <ion-tab-button tab="tab1" href="/home" @click="this.$router.push({path: '/home'})">
           <ion-icon :icon="home" v-if="this.$router.currentRoute.value.name == 'homePageRoute'"/>
@@ -26,12 +27,12 @@
 </template>
 
 <script >
-import { IonTabBar, IonTabButton, IonTabs, IonSpinner, IonLabel, IonIcon, IonPage } from '@ionic/vue';
+import { IonTabBar, IonTabButton, IonRouterOutlet, IonTabs, IonSpinner, IonLabel, IonIcon, IonPage } from '@ionic/vue';
 import { home, homeOutline, addCircleOutline, addCircle, personCircle, personCircleOutline } from 'ionicons/icons';
 
 export default {
   name: 'Tabs',
-  components: { IonSpinner, IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage },
+  components: { IonSpinner, IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
   setup() {
     return {
       home,

@@ -19,7 +19,7 @@ class TxnManager {
   }
 
   getTotalExpenses () {
-    return this._feesTotal() + this._expensesTotal()
+    return this._feesTotal() + this._expensesTotal() - this._sum(pluck(this._deposits(), 'amount'))
   }
 
   getAccountBalance () {
