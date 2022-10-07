@@ -47,7 +47,7 @@
             <ion-card class="icon-cell banks" router-link="/banks">
               <ion-icon :icon="folderOutline"/>
             </ion-card>
-            <small>Banks</small>
+            <small>Accounts</small>
           </div>
           <div class="text-center cell-wrapper">
             <ion-card class="icon-cell categories" router-link="/categories">
@@ -117,7 +117,7 @@ export default  {
     fetchBalances: function () {
       const self = this
       self.$store.commit('hideLoader', 'fetchBalances')
-      fetch(api(`/v1/balances`), {
+      fetch(api(`/v1/transactions/balances`), {
         method: 'GET',
         headers: apiHeaders('TRANSACTIONS')
       })

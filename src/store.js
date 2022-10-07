@@ -208,7 +208,7 @@ export default createStore({
       const { state } = context
       if (!isEmpty(state.currentUser)) return false
       context.commit('showLoader', 'fetchCurrentUser')
-      fetch(`${env("VUE_APP_API_URL")}/v1/users/${state.currentUser.id}`, {
+      fetch(`${env("VUE_APP_API_URL")}/v1/user`, {
         method: "GET",
         headers: apiHeaders('USERS')
       })
@@ -512,7 +512,7 @@ export default createStore({
           return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
         }).join('&')
       }
-      const apiUrl = params == '' ? '/v1/bank_accounts' : `/v1/bank_accounts?${params}`
+      const apiUrl = params == '' ? '/v1/accounts' : `/v1/accounts?${params}`
       context.commit('showLoader', 'fetchBankAccounts')
       fetch(api(apiUrl), {
         method: "GET",

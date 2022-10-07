@@ -1,3 +1,2 @@
-git push origin master
 yarn build
 ./s3 deploy production
