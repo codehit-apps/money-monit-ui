@@ -190,7 +190,7 @@ export default createStore({
   actions: {
     login (context, opts) {
       const [auth, onSuccess] = opts
-      fetch(`${env("VUE_APP_API_URL")}/login`, {
+      fetch(`${env("VUE_APP_API_URL")}/v1/login`, {
         method: "POST",
         headers: apiHeaders('USERS'),
         body: JSON.stringify(auth)
@@ -208,7 +208,7 @@ export default createStore({
       const { state } = context
       if (!isEmpty(state.currentUser)) return false
       context.commit('showLoader', 'fetchCurrentUser')
-      fetch(`${env("VUE_APP_API_URL")}/user`, {
+      fetch(`${env("VUE_APP_API_URL")}/v1/users/${state.currentUser.id}`, {
         method: "GET",
         headers: apiHeaders('USERS')
       })
