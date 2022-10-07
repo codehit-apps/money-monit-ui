@@ -538,7 +538,7 @@ export default createStore({
         context.commit('setBankAccount', item)
       } else {
         context.commit('showLoader', 'fetchBankAccount')
-        fetch(api(`/v1/bank_accounts/${bankAccountId}`), {
+        fetch(api(`/v1/accounts/${bankAccountId}`), {
           method: "GET",
           headers: apiHeaders('BANK_ACCOUNTS')
         })
@@ -555,7 +555,7 @@ export default createStore({
       const { state } = context
       const [onSuccess, onError] = opts
       context.commit('showLoader', 'updateBankAccount')
-      fetch(api(`/v1/bank_accounts/${state.bankAccount.id}`), {
+      fetch(api(`/v1/accounts/${state.bankAccount.id}`), {
         method: "PUT",
         headers: apiHeaders('BANK_ACCOUNTS'),
         body: JSON.stringify({
@@ -573,7 +573,7 @@ export default createStore({
       const { state } = context
       const [onSuccess, onError] = opts
       context.commit('showLoader', 'createBankAccount')
-      fetch(api(`/v1/bank_accounts`), {
+      fetch(api(`/v1/accounts`), {
         method: "POST",
         headers: apiHeaders('BANK_ACCOUNTS'),
         body: JSON.stringify({
@@ -590,7 +590,7 @@ export default createStore({
     deleteBankAccount (context, opts) {
       const [bankAccountId, onSuccess, onError] = opts
       context.commit('showLoader', 'deleteBankAccount')
-      fetch(api(`/v1/bank_accounts/${bankAccountId}`), {
+      fetch(api(`/v1/accounts/${bankAccountId}`), {
         method: "DELETE",
         headers: apiHeaders('BANK_ACCOUNTS'),
       })
@@ -728,7 +728,7 @@ export default createStore({
     },
     fetchTransactionTypes (context) {
       context.commit('showLoader', 'fetchTransactionTypes')
-      fetch(api('/v1/transaction_types'), {
+      fetch(api('/v1/transactions/types_for_select'), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
       })

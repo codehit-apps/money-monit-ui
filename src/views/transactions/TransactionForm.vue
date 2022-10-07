@@ -51,7 +51,7 @@
       </div>
       <div v-else>
         <ion-item>
-          <ion-label position="floating"> Bank Account </ion-label>
+          <ion-label position="floating"> Account </ion-label>
           <ion-select placeholder="Select" v-model="bank_account_id" interface="action-sheet">
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>

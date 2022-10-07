@@ -5,7 +5,7 @@
          <ion-buttons slot="start">
           <ion-back-button defaultHref="/home"></ion-back-button>
         </ion-buttons>
-        <ion-title class="align-center">Banks</ion-title>
+        <ion-title class="align-center">Accounts</ion-title>
         <ion-buttons slot="end">
           <ion-button router-link="/banks/new">
             <ion-icon slot="icon-only" :icon="addCircle"/>
@@ -64,7 +64,7 @@ export default  {
       const alert = await alertController
         .create({
           header: 'Are you sure?',
-          message: 'Please click Confirm to delete this bank account.',
+          message: 'Please click Confirm to delete this account.',
           buttons: [
             {
               text: 'Cancel',

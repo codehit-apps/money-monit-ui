@@ -5,7 +5,7 @@
          <ion-buttons slot="start">
           <ion-back-button defaultHref="/banks"></ion-back-button>
         </ion-buttons>
-        <ion-title class="align-center">Bank Info</ion-title>
+        <ion-title class="align-center">Account Info</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -112,7 +112,7 @@ export default  {
       const self = this
       const success = function (resp) {
         if (resp.errors && Object.keys(resp.errors).length) {
-          self.showAlert("Bank account could not be updated. Please fix errors on the form.", "danger")
+          self.showAlert("Account could not be updated. Please fix errors on the form.", "danger")
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
@@ -128,7 +128,7 @@ export default  {
       const self = this
       const success = function (resp) {
         if (resp.errors && Object.keys(resp.errors).length) {
-          self.showAlert("Bank account could not be created. Please fix errors on the form.", "danger")
+          self.showAlert("Account could not be created. Please fix errors on the form.", "danger")
           self.errors = resp.errors
           console.log(resp.errors)
         } else {

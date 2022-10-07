@@ -36,7 +36,7 @@
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating"> Bank Account </ion-label>
+              <ion-label position="floating"> Account </ion-label>
               <ion-select placeholder="Select" v-model="filter.bank_account_id" multiple>
                 <ion-select-option value="">All</ion-select-option>
                 <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
@@ -161,7 +161,7 @@ export default  {
       each(self.$store.state.budgets, function (budget) {
         each(budget.budget_lines, function (line) {
           self.$store.commit('showLoader', 'lineExpenses')
-          fetch(api(`/v1/expenses?q[category_id_in]=${line.category_id}&q[datetime_gteq]=${budget.from_date}&q[datetime_lteq]=${budget.to_date}`), {
+          fetch(api(`/v1/transactions/total_expenses?q[category_id_in]=${line.category_id}&q[datetime_gteq]=${budget.from_date}&q[datetime_lteq]=${budget.to_date}`), {
             method: "GET",
             headers: apiHeaders('TRANSACTIONS')
           })
@@ -190,7 +190,7 @@ export default  {
     filterTransactions: function () {
       const self = this
       self.$store.commit('showLoader', 'filterTransactions')
-      fetch(api(`/v1/expenses?q[category_id_in]=${self.filter.category_id}&q[datetime_gteq]=${self.filter.from_date}&q[datetime_lteq]=${self.filter.to_date}&q[type_in]=${self.filter.type}&q[bank_account_id_in]=${self.filter.bank_account_id}`), {
+      fetch(api(`/v1/transactions/total_expenses?q[category_id_in]=${self.filter.category_id}&q[datetime_gteq]=${self.filter.from_date}&q[datetime_lteq]=${self.filter.to_date}&q[type_in]=${self.filter.type}&q[bank_account_id_in]=${self.filter.bank_account_id}`), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
       })
