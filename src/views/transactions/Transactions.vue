@@ -7,6 +7,10 @@
         </ion-buttons>
         <ion-title class="align-center">Transactions</ion-title>
         <ion-buttons slot="end">
+          <ion-button @click="this.showFilter=true" :color="filterApplied ? 'danger' : ''">
+            <ion-icon slot="icon-only" v-if="filterApplied" :icon="funnel"/>
+            <ion-icon slot="icon-only" v-if="!filterApplied" :icon="funnelOutline"/>
+          </ion-button>
           <ion-button router-link="/transactions/new">
             <ion-icon slot="icon-only" :icon="addCircle"/>
           </ion-button>
@@ -17,6 +21,52 @@
       <ion-refresher slot="fixed" @ionRefresh="doRefresh($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
+      <ion-card v-if="showFilter">
+        <ion-card-content>
+          <div>
+            <ion-item>
+              <ion-label position="floating"> Type </ion-label>
+              <ion-select placeholder="Select" v-model="filter.type" multiple>
+                <ion-select-option value="">All</ion-select-option>
+                <ion-select-option v-for="(key, val) in this.$store.state.transactionTypes" :key="key"  :value="val">{{ key }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating"> Category </ion-label>
+              <ion-select placeholder="Select" v-model="filter.category_id" multiple>
+                <ion-select-option value="">All</ion-select-option>
+                <ion-select-option v-for="category in this.$store.state.categories" :key="category.id" :value="category.id">{{ category.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating"> Account </ion-label>
+              <ion-select placeholder="Select" v-model="filter.account_id" multiple>
+                <ion-select-option value="">All</ion-select-option>
+                <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating"> From </ion-label>
+              <ion-datetime placeholder="Select" v-model="filter.from_date"/>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating"> To </ion-label>
+              <ion-datetime placeholder="Select" v-model="filter.to_date"/>
+            </ion-item>
+
+            <div class="ion-padding-top content-end d-flex-center">
+              <div class="d-flex-center">
+                <ion-button type="button" class="ion-margin-end" @click="showFilter=false" color="light">close</ion-button>
+                <ion-button type="button" class="ion-margin-end" @click="applyFilter" color="primary">Filter</ion-button>
+              </div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
       <div class="txn-group" v-for="(group, date) in this.$store.state.transactions" :key="date">
         <div class="txn-data">
           <div class="fw-500">{{formatDate(date)}}</div>
@@ -69,27 +119,42 @@
 </template>
 
 <script >
-import { alertController, IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
-import { addCircle, arrowForwardOutline } from 'ionicons/icons';
+import { IonCard, IonCardContent, IonDatetime, IonSelect, IonLabel, IonSelectOption, alertController, IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon } from '@ionic/vue';
+import { funnel, funnelOutline, addCircle, arrowForwardOutline } from 'ionicons/icons';
 import { findWhere, isUndefined, isNull, groupBy, pluck } from 'underscore';
-import { txnManager, pesoFormatter, dateFormatter } from '../../helper'
+import { pesoFormatter, dateFormatter } from '../../helper'
+
+const DEFAULT_FILTERS = {
+  account_id: '',
+  category_id: '',
+  from_date: '',
+  to_date: new Date().toDateString(),
+  type: '',
+}
 
 export default  {
   name: 'Banks',
-  components: { IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
+  components: { IonCard, IonCardContent, IonDatetime, IonSelect, IonLabel, IonSelectOption, IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
   setup() {
     return {
+      funnel,
+      funnelOutline,
       addCircle,
       arrowForwardOutline
     }
   },
   data: function () {
     return {
+      showFilter: false,
+      filterApplied: false,
+      filter: DEFAULT_FILTERS
     }
   },
   created: function () {
+    console.log("Asd")
     this.$store.commit('setTransactionsNextPage', 1)
-    this.$store.dispatch('fetchTransactions', [this.$route.query])
+    this.setFilter()
+    this.filterTransactions()
     this.$store.dispatch('fetchBankAccounts', [])
     this.$store.dispatch('fetchCategories', [])
     this.$store.dispatch('fetchTransactionTypes')
@@ -109,7 +174,7 @@ export default  {
         infiniteScroll.complete()
       }
       const appendResult = true
-      this.$store.dispatch('fetchTransactions', [this.$route.query, onSuccess, appendResult])
+      this.$store.dispatch('fetchTransactions', [this.filterToParams(), onSuccess, appendResult])
     },
     deleteTransaction: async function (transactionId) {
       const self = this
@@ -137,6 +202,38 @@ export default  {
           ]
         })
       return alert.present()
+    },
+    setFilter: function () {
+      const p = this.$route.query
+      this.filter = {
+        account_id: p['q[account_id_in]'] || '',
+        category_id: p['q[category_id_in]'] || '',
+        from_date: p['q[datetime_gteq]'] || '',
+        to_date: p['q[datetime_lteq]'] || new Date().toDateString(),
+        type: p['q[type_in]'] || '',
+      }
+    },
+    applyFilter: function () {
+      this.filterApplied = true
+      this.filterTransactions()
+    },
+    filterTransactions: function () {
+      this.$store.commit('setTransactionsNextPage', 1)
+      this.$store.dispatch('fetchTransactions', [this.filterToParams()])
+      this.setFilterApplied()
+    },
+    filterToParams: function () {
+      const filters = {
+        'q[category_id_in]': this.filter.category_id,
+        'q[datetime_gteq]': this.filter.from_date,
+        'q[datetime_lteq]': this.filter.to_date,
+        'q[type_in]': this.filter.type,
+        'q[account_id_in]': this.filter.account_id
+      }
+      return filters
+    },
+    setFilterApplied: function () {
+      this.filterApplied = JSON.stringify(this.filter) != JSON.stringify(DEFAULT_FILTERS)
     },
     txnCategory: function (txn) {
       return findWhere(this.$store.state.categories, {id: txn.category_id}) || {}

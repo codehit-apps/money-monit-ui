@@ -702,9 +702,8 @@ export default createStore({
       let params = ''
       if (query != null) {
         query['page'] = state.transactionsNextPage
-        params = Object.keys(query).map(function(key){ 
-          return encodeURIComponent(key) + '=' + encodeURIComponent(query[key])
-        }).join('&')
+        params = new URLSearchParams(query)
+        params = params.toString()
       }
       const apiUrl = params == '' ? '/v1/transactions' : `/v1/transactions?${params}`
       context.commit('showLoader', 'fetchTransactions')

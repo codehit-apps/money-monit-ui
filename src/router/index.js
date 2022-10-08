@@ -45,7 +45,8 @@ const routes = [
         component: () => import('@/views/Reports.vue')
       },
       { 
-      path: '/transactions',
+        path: '/transactions',
+        name: 'transactionsPath',
         component: () => import('@/views/transactions/Transactions.vue')
       },
       {
