@@ -161,15 +161,13 @@ export default  {
       each(self.$store.state.budgets, function (budget) {
         each(budget.budget_lines, function (line) {
           self.$store.commit('showLoader', 'lineExpenses')
-          fetch(api(`/v1/transactions?q[category_id_in]=${line.category_id}&q[datetime_gteq]=${budget.from_date}&q[datetime_lteq]=${budget.to_date}`), {
+          fetch(api(`/v1/transactions/total_expenses?q[category_id_in]=${line.category_id}&q[datetime_gteq]=${budget.from_date}&q[datetime_lteq]=${budget.to_date}`), {
             method: "GET",
             headers: apiHeaders('TRANSACTIONS')
           })
           .then(resp => resp.json())
-          .then(function(data) {
-            let total = 0
-            Object.values(data.items).flatMap(function(e){ total += e.total })
-            self.expenses[line.id] = total
+          .then(function(resp) {
+            self.expenses[line.id] = resp.total
           })
           .finally(function () {
             self.$store.commit('hideLoader', 'lineExpenses')
@@ -192,15 +190,13 @@ export default  {
     filterTransactions: function () {
       const self = this
       self.$store.commit('showLoader', 'filterTransactions')
-      fetch(api(`/v1/transactions?q[category_id_in]=${self.filter.category_id}&q[datetime_gteq]=${self.filter.from_date}&q[datetime_lteq]=${self.filter.to_date}&q[type_in]=${self.filter.type}&q[account_id_in]=${self.filter.account_id}`), {
+      fetch(api(`/v1/transactions/total_expenses?q[category_id_in]=${self.filter.category_id}&q[datetime_gteq]=${self.filter.from_date}&q[datetime_lteq]=${self.filter.to_date}&q[type_in]=${self.filter.type}&q[account_id_in]=${self.filter.account_id}`), {
         method: "GET",
         headers: apiHeaders('TRANSACTIONS')
       })
       .then(resp => resp.json())
-      .then(function(data) {
-        let total = 0
-        Object.values(data.items).flatMap(function(e){ total += e.total })
-        self.totalTransactions = total
+      .then(function(resp) {
+        self.totalTransactions = resp.total
       })
       .finally(function () {
         self.$store.commit('hideLoader', 'filterTransactions')
