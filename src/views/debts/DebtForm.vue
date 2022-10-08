@@ -12,7 +12,7 @@
       <ion-item>
         <ion-label position="floating"> Debtor </ion-label>
         <ion-select placeholder="Select" v-model="debtor_id" interface="action-sheet">
-          <ion-select-option v-for="user in this.$store.state.users" :key="user.id"  :value="user.id">{{ user.name }}</ion-select-option>
+          <ion-select-option v-for="user in this.$store.state.users" :key="user.id"  :value="user.id">{{ this.userName(user) }}</ion-select-option>
         </ion-select>
       </ion-item>
       <div v-if="!!errors['debtor_id']" class="ion-margin-bottom ion-margin-start">
@@ -22,7 +22,7 @@
       <ion-item>
         <ion-label position="floating"> Creditor </ion-label>
         <ion-select placeholder="Select" v-model="creditor_id" interface="action-sheet">
-          <ion-select-option v-for="user in this.$store.state.users" :key="user.id"  :value="user.id">{{ user.name }}</ion-select-option>
+          <ion-select-option v-for="user in this.$store.state.users" :key="user.id"  :value="user.id">{{ this.userName(user) }}</ion-select-option>
         </ion-select>
       </ion-item>
       <div v-if="!!errors['creditor_id']" class="ion-margin-bottom ion-margin-start">
@@ -233,6 +233,9 @@ export default  {
       } else {
         this.createDebt()
       }
+    },
+    userName: function (user) {
+      return user.first_name + ' ' + user.last_name
     },
     updateDebt: function () {
       const self = this
