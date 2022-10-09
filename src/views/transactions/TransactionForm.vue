@@ -85,7 +85,7 @@
 
       <ion-item>
         <ion-label position="floating"> DateTime </ion-label>
-        <ion-datetime placeholder="Select" v-model="datetime"/>
+        <ion-datetime placeholder="Select" display-format="MMM M, YYYY h:m A" v-model="datetime"/>
       </ion-item>
       <div v-if="!!errors['datetime']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['datetime']" :key="error">{{ error }}</ion-text>
@@ -240,8 +240,6 @@ export default  {
       this.$store.dispatch('fetchTransactionTypes')
       this.$store.dispatch('fetchBankAccounts', [])
       this.$store.dispatch('fetchCategories', [])
-      if (this.type == null) this.$store.commit('setTransactionType', 'Withdraw')
-      if (this.datetime == null) this.$store.commit('setTransactionDatetime', (new Date().toISOString()))
     }
   },
   watch: {

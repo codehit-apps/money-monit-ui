@@ -29,7 +29,7 @@ const DEFAULTS = {
     description: '',
     amount: '',
     fee: 0,
-    datetime: new Date().toDateString(),
+    datetime: new Date().toISOString(),
     category_id: '',
     to_account_id: ''
   },
@@ -534,7 +534,7 @@ export default createStore({
     deletePaymentLine (context, opts) {
       const [debtId, lineId, onSuccess, onError] = opts
       context.commit('showLoader', 'deletePaymentLine')
-      fetch(api(`/v1/debts/${debtId}/debt_payments/${lineId}`), {
+      fetch(api(`/v1/debt_payments/${lineId}`), {
         method: "DELETE",
         headers: apiHeaders('DEBTS'),
       })
