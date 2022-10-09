@@ -22,7 +22,7 @@
 
       <ion-item>
         <ion-label position="floating"> Paid At </ion-label>
-        <ion-datetime placeholder="Select" v-model="paid_at"/>
+        <ion-datetime v-model="paid_at"/>
       </ion-item>
       <div v-if="!!errors['paid_at']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['paid_at']" :key="error">{{ error }}</ion-text>
@@ -52,7 +52,7 @@ import { findWhere } from 'underscore';
 import { pesoFormatter } from '../../helper'
 
 export default  {
-  name: 'Budgets',
+  name: 'paymet-line-form-item',
   components: { IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

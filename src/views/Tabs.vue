@@ -31,7 +31,7 @@ import { IonTabBar, IonTabButton, IonRouterOutlet, IonTabs, IonSpinner, IonLabel
 import { home, homeOutline, addCircleOutline, addCircle, personCircle, personCircleOutline } from 'ionicons/icons';
 
 export default {
-  name: 'Tabs',
+  name: 'tabs-item',
   components: { IonSpinner, IonLabel, IonTabs, IonTabBar, IonTabButton, IonIcon, IonPage, IonRouterOutlet },
   setup() {
     return {

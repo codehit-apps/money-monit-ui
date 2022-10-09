@@ -7,15 +7,15 @@
             <div class="col-sm pt-5">
               <div class="pt-5">
                 <h1>moneyMonit</h1>
-                <p contenteditable="false">Simple expenses & balance tracker across accounts.</p>
-                <ion-router-link href="/#/login" target="_self" class="btn btn-outline-secondary">My Account</ion-router-link>
+                <p>Easily track your current balance on all your bank accounts, wallets including cash on hand.</p>
+                <router-link to="/login" class="btn btn-outline-secondary">My Account</router-link>
               </div>
             </div>
             <div class="col-sm-6">
               <div class="pt-5">
                 <a href="/assets/img/moneymonit.png" data-fancybox="moneymonit-images">
-                  <div class="banner">
-                    <img src="/assets/img/moneymonit.png" alt="moneyMonit" class="img-fluid">
+                  <div class="merp-banner">
+                    <img src="/assets/img/moneymonit.png" alt="actMonit" class="img-fluid">
                   </div>
                 </a>
               </div>
@@ -25,8 +25,9 @@
       </section>
       <div class="container">
         <section>
-          <h3 class="mt-5">Screenshots</h3>
-          <div class="row text-center">
+          <h3 class="mt-5">Features</h3>
+          <p>Stay updated on your current balance to better plan your financial spendings.</p>
+          <div class="row">
             <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
               <div class="img-thumbnail mb-3">
                 <a href="/assets/img/moneymonit/1.png" data-fancybox="moneymonit-images">
@@ -35,6 +36,10 @@
                   </div>
                 </a>
               </div>
+              <a href="/assets/img/moneymonit/1.png" data-fancybox="moneymonit-images">
+                <h3 class="h5 mb-1">Reports</h3>
+              </a>
+              <p class="text-muted">Monitor your budget expenses, get notified with over expenses.</p>
             </div>
             <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
               <div class="img-thumbnail mb-3">
@@ -44,6 +49,10 @@
                   </div>
                 </a>
               </div>
+              <a href="/assets/img/moneymonit/2.png" data-fancybox="moneymonit-images">
+                <h3 class="h5 mb-1">Transactions</h3>
+              </a>
+              <p class="text-muted">Manage your transactions per account, category and date.</p>
             </div>
             <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
               <div class="img-thumbnail mb-3">
@@ -53,6 +62,10 @@
                   </div>
                 </a>
               </div>
+              <a href="/assets/img/moneymonit/3.png" data-fancybox="moneymonit-images">
+                <h3 class="h5 mb-1">Accounts</h3>
+              </a>
+              <p class="text-muted">Manage your accounts and link them to your transactions.</p>
             </div>
             <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
               <div class="img-thumbnail mb-3">
@@ -62,6 +75,10 @@
                   </div>
                 </a>
               </div>
+              <a href="/assets/img/moneymonit/4.png" data-fancybox="moneymonit-images">
+                <h3 class="h5 mb-1">Budgets</h3>
+              </a>
+              <p class="text-muted">Create your budgets, track multiple categories, set limits per category.</p>
             </div>
             <div class="col-sm-6 col-md-4 col-xl-3 mb-3">
               <div class="img-thumbnail mb-3">
@@ -71,6 +88,10 @@
                   </div>
                 </a>
               </div>
+              <a href="/assets/img/moneymonit/5.png" data-fancybox="moneymonit-images">
+                <h3 class="h5 mb-1">Categories</h3>
+              </a>
+              <p class="text-muted">Manage your transaction categories and use them to track your budgets.</p>
             </div>
           </div>
         </section>
@@ -86,16 +107,16 @@ import Footer from '@/components/Footer.vue'
 import { IonPage, IonContent } from '@ionic/vue'
 
 export default {
-  name: 'moneyMonit',
+  name: 'money-monit',
   components: {Footer, IonPage, IonContent},
 }
 </script>
 
 <style>
   .banner-section {
-    background:#f8f9fa url('/assets/img/cityscape.png') no-repeat center bottom;
+    background:#f8f9fa url('assets/img/cityscape.png') no-repeat center bottom;
   }
-  .banner {
+  .merp-banner {
     overflow: hidden;
     height: 350px;
     text-align: center;

@@ -73,7 +73,7 @@ import { newspaperOutline, cardOutline, barChartOutline, folderOutline, cashOutl
 import { txnManager, pesoFormatter, api, apiHeaders } from '../helper'
 
 export default  {
-  name: 'Home',
+  name: 'home-item',
   components: {IonText, IonIcon, IonContent, IonPage, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent },
   setup() {
     return {

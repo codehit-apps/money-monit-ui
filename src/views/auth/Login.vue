@@ -52,7 +52,7 @@ import { isAuthenticated } from '../../helper'
 
 export default {
   components: {IonPage, IonContent, IonGrid, IonRow, IonCol, IonText, IonCard, IonCardContent, IonCardTitle, IonCardHeader, IonButton, IonItem, IonLabel, IonInput},
-  name: 'Login',
+  name: 'login-item',
   data: function () {
     return {
       auth: {

@@ -52,7 +52,7 @@ import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter, dateFormatter } from '../../helper'
 
 export default  {
-  name: 'Budget',
+  name: 'budget-item',
   components: { IonRefresher, IonRefresherContent, IonBadge, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {

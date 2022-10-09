@@ -33,7 +33,7 @@ import { logOut, helpCircle, personCircle } from 'ionicons/icons';
 import { logout } from '../helper'
 
 export default  {
-  name: 'Account',
+  name: 'account-item',
   components: { IonIcon, IonContent, IonPage, IonLabel, IonList, IonItem },
   setup() {
     return {

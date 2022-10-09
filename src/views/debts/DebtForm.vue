@@ -40,7 +40,7 @@
 
       <ion-item>
         <ion-label position="floating"> Date </ion-label>
-        <ion-datetime placeholder="Select" v-model="debited_at"/>
+        <ion-datetime v-model="debited_at"/>
       </ion-item>
       <div v-if="!!errors['debited_at']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['debited_at']" :key="error">{{ error }}</ion-text>
@@ -134,7 +134,7 @@ import { pesoFormatter, dateFormatter } from '../../helper'
 import { sortBy, each } from 'underscore';
 
 export default  {
-  name: 'BankForm',
+  name: 'debt-form-item',
   components: { IonItemOption, IonItemOptions, IonItemSliding, IonList, IonIcon, IonCard, IonCardContent, IonDatetime, IonText, IonSelect, IonSelectOption, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

@@ -39,7 +39,7 @@ import { alertController, IonRefresher, IonRefresherContent, IonItemOption, IonP
 import { addCircle } from 'ionicons/icons';
 
 export default  {
-  name: 'Banks',
+  name: 'users-item',
   components: { IonRefresher, IonRefresherContent, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {

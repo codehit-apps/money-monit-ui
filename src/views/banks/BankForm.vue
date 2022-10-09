@@ -39,7 +39,7 @@ import { toastController, IonText, IonSelect, IonSelectOption, IonInput, IonPage
 import { addCircle } from 'ionicons/icons';
 
 export default  {
-  name: 'BankForm',
+  name: 'bank-form-item',
   components: { IonText, IonSelect, IonSelectOption, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

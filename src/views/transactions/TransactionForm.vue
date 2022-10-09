@@ -85,7 +85,7 @@
 
       <ion-item>
         <ion-label position="floating"> DateTime </ion-label>
-        <ion-datetime placeholder="Select" display-format="MMM M, YYYY h:m A" v-model="datetime"/>
+        <ion-datetime locale="en-PH" hour-cycle="h12" display-format="MMM M, YYYY h:m A" v-model="datetime"/>
       </ion-item>
       <div v-if="!!errors['datetime']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['datetime']" :key="error">{{ error }}</ion-text>
@@ -104,7 +104,7 @@ import { toastController, IonText, IonSelectOption, IonSelect, IonDatetime, IonI
 import { addCircle } from 'ionicons/icons';
 
 export default  {
-  name: 'TransactionForm',
+  name: 'transaction-form-item',
   components: { IonText, IonSelectOption, IonSelect, IonDatetime, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

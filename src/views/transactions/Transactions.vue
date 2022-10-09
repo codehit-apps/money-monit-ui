@@ -50,12 +50,12 @@
 
             <ion-item>
               <ion-label position="floating"> From </ion-label>
-              <ion-datetime placeholder="Select" v-model="filter.from_date"/>
+              <ion-datetime v-model="filter.from_date"/>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating"> To </ion-label>
-              <ion-datetime placeholder="Select" v-model="filter.to_date"/>
+              <ion-datetime v-model="filter.to_date"/>
             </ion-item>
 
             <div class="ion-padding-top content-end d-flex-center">
@@ -133,7 +133,7 @@ const DEFAULT_FILTERS = {
 }
 
 export default  {
-  name: 'Banks',
+  name: 'transactions-item',
   components: { IonCard, IonCardContent, IonDatetime, IonSelect, IonLabel, IonSelectOption, IonRefresher, IonRefresherContent, IonInfiniteScroll, IonInfiniteScrollContent, IonChip, IonList, IonItem, IonText, IonPage, IonItemSliding, IonItemOptions, IonItemOption, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon },
   setup() {
     return {

@@ -39,7 +39,7 @@ import { alertController, IonRefresher, IonRefresherContent, IonPage, IonItemSli
 import { addCircle } from 'ionicons/icons';
 
 export default  {
-  name: 'Categories',
+  name: 'categories-item',
   components: { IonRefresher, IonRefresherContent, IonPage, IonItemSliding, IonItemOption, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem, IonLabel },
   setup() {
     return {

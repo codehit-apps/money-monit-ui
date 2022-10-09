@@ -33,7 +33,7 @@ import { toastController, IonText, IonInput, IonPage, IonHeader, IonToolbar, Ion
 import { addCircle } from 'ionicons/icons';
 
 export default  {
-  name: 'CategoryForm',
+  name: 'category-form-item',
   components: { IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

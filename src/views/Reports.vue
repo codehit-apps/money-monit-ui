@@ -47,12 +47,12 @@
 
             <ion-item>
               <ion-label position="floating"> From </ion-label>
-              <ion-datetime placeholder="Select" v-model="filter.from_date"/>
+              <ion-datetime v-model="filter.from_date"/>
             </ion-item>
 
             <ion-item>
               <ion-label position="floating"> To </ion-label>
-              <ion-datetime placeholder="Select" v-model="filter.to_date"/>
+              <ion-datetime v-model="filter.to_date"/>
             </ion-item>
 
             <div class="ion-padding-top content-between d-flex-center">
@@ -120,7 +120,7 @@ import { findWhere, each, pluck } from 'underscore';
 import { funnelOutline } from 'ionicons/icons';
 
 export default  {
-  name: 'Reports',
+  name: 'reports-item',
   components: {IonIcon, IonButton, IonDatetime, IonItem, IonSelect, IonLabel, IonSelectOption, IonCard, IonCardHeader, IonCardContent, IonText, IonCardTitle, IonCardSubtitle, IonHeader, IonButtons, IonBackButton, IonToolbar, IonTitle, IonContent, IonPage },
   setup() {
     return {

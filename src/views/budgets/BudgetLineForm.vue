@@ -44,7 +44,7 @@ import { findWhere } from 'underscore';
 import { pesoFormatter } from '../../helper'
 
 export default  {
-  name: 'Budgets',
+  name: 'budgets-item',
   components: { IonSelect, IonSelectOption, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

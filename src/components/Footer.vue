@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'footer-item',
 }
 </script>
 

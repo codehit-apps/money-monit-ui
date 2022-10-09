@@ -19,7 +19,7 @@
 
       <ion-item>
         <ion-label position="floating"> From </ion-label>
-        <ion-datetime placeholder="Select" v-model="from_date"/>
+        <ion-datetime v-model="from_date"/>
       </ion-item>
       <div v-if="!!errors['from_date']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['from_date']" :key="error">{{ error }}</ion-text>
@@ -27,7 +27,7 @@
 
       <ion-item>
         <ion-label position="floating"> To </ion-label>
-        <ion-datetime placeholder="Select" v-model="to_date"/>
+        <ion-datetime v-model="to_date"/>
       </ion-item>
       <div v-if="!!errors['to_date']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['to_date']" :key="error">{{ error }}</ion-text>
@@ -85,7 +85,7 @@ import { findWhere, sortBy } from 'underscore';
 import { pesoFormatter } from '../../helper'
 
 export default  {
-  name: 'Budgets',
+  name: 'budgets-item',
   components: { IonList, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonToggle, IonDatetime, IonText, IonInput, IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonItem, IonLabel },
   setup() {
     return {

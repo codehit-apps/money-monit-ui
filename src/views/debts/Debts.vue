@@ -85,7 +85,7 @@ import { where, each } from 'underscore';
 import { pesoFormatter } from '../../helper'
 
 export default  {
-  name: 'Debts',
+  name: 'debts-item',
   components: { DebtCard, IonListHeader, IonRefresher, IonRefresherContent, IonItemOption, IonPage, IonItemSliding, IonItemOptions, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonButton, IonIcon, IonList, IonItem },
   setup() {
     return {
