@@ -44,7 +44,6 @@ export default {
     }
   },
   created: function () {
-    console.log()
   }
 }
 </script>

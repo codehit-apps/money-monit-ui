@@ -99,6 +99,8 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
+          self.errors = {}
+          self.$store.dispatch('resetBudgetLine')
           self.$router.push({path: `/budgets/${self.$route.params.budget_id}/edit`})
         }
       }

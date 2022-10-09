@@ -151,7 +151,6 @@ export default  {
     }
   },
   created: function () {
-    console.log("Asd")
     this.$store.commit('setTransactionsNextPage', 1)
     this.setFilter()
     this.filterTransactions()
@@ -262,6 +261,7 @@ export default  {
       return pesoFormatter().format(num)
     },
     formatDate: function (date) {
+      if (date == null || date == '') return null
       return dateFormatter().format(new Date(date))
     },
   },

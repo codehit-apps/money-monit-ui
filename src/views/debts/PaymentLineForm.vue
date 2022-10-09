@@ -126,13 +126,14 @@ export default  {
             {
               text: 'Confirm',
               handler: () => {
+                const line = self.$store.state.debt_payment
                 const success = function () {
-                  self.$store.dispatch('reloadDebt', self.$route.params.id)
+                  self.$store.dispatch('reloadDebt', line.debt_id)
+                  self.$router.push({path: `/debts/${line.debt_id}/edit`})
                 }
                 const error = function (err) {
                   console.log(err)
                 }
-                const line = self.$store.state.debt_payment
                 self.$store.dispatch('acceptPayment', [line.debt_id, line.id, success, error])
               }
             }
@@ -148,6 +149,8 @@ export default  {
           self.errors = resp.errors
           console.log(resp.errors)
         } else {
+          self.errors = {}
+          self.$store.dispatch('resetPaymentLine')
           self.$router.push({path: `/debts/${self.$route.params.debt_id}/edit`})
         }
       }

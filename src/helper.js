@@ -56,3 +56,7 @@ export const pad = function (num) {
   var s = '0000' + num;
   return s.substr(s.length-4);
 }
+
+export const dupObj = function (obj) {
+  return Object.assign({}, obj)
+}

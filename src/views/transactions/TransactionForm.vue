@@ -25,8 +25,8 @@
           <ion-select-option v-for="category in this.$store.state.categories" :key="category.id" :value="category.id">{{ category.name }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <div v-if="!!errors['category_id']" class="ion-margin-bottom ion-margin-start">
-        <ion-text color="danger" v-for="error in errors['category_id']" :key="error">{{ error }}</ion-text>
+      <div v-if="!!errors['category']" class="ion-margin-bottom ion-margin-start">
+        <ion-text color="danger" v-for="error in errors['category']" :key="error">{{ error }}</ion-text>
       </div>
 
       <div v-if="type == 'Transfer'">
@@ -36,8 +36,8 @@
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>
         </ion-item>
-        <div v-if="!!errors['account_id']" class="ion-margin-bottom ion-margin-start">
-          <ion-text color="danger" v-for="error in errors['account_id']" :key="error">{{ error }}</ion-text>
+        <div v-if="!!errors['account']" class="ion-margin-bottom ion-margin-start">
+          <ion-text color="danger" v-for="error in errors['account']" :key="error">{{ error }}</ion-text>
         </div>
         <ion-item>
           <ion-label position="floating"> Target Account </ion-label>
@@ -45,8 +45,8 @@
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>
         </ion-item>
-        <div v-if="!!errors['to_account_id']" class="ion-margin-bottom ion-margin-start">
-          <ion-text color="danger" v-for="error in errors['to_account_id']" :key="error">{{ error }}</ion-text>
+        <div v-if="!!errors['to_account']" class="ion-margin-bottom ion-margin-start">
+          <ion-text color="danger" v-for="error in errors['to_account']" :key="error">{{ error }}</ion-text>
         </div>
       </div>
       <div v-else>
@@ -56,8 +56,8 @@
             <ion-select-option v-for="bankAccount in this.$store.state.bankAccounts" :key="bankAccount.id" :value="bankAccount.id" :class="bankAccount.color">{{ bankAccount.name }}</ion-select-option>
           </ion-select>
         </ion-item>
-        <div v-if="!!errors['account_id']" class="ion-margin-bottom ion-margin-start">
-          <ion-text color="danger" v-for="error in errors['account_id']" :key="error">{{ error }}</ion-text>
+        <div v-if="!!errors['account']" class="ion-margin-bottom ion-margin-start">
+          <ion-text color="danger" v-for="error in errors['account']" :key="error">{{ error }}</ion-text>
         </div>
       </div>
 

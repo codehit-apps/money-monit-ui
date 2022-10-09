@@ -215,7 +215,7 @@ export default  {
       return pesoFormatter().format(num)
     },
     formatDate: function (date) {
-      if (date == null) return
+      if (date == null || date == '') return null
       return dateFormatter().format(new Date(date))
     },
     async showAlert(message, color) {

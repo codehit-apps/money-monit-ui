@@ -26,7 +26,7 @@
             </ion-label>
           </ion-item>
           <ion-item-options side="end">
-            <ion-item-option color="danger" @click="deleteuser(user.id)">Delete</ion-item-option>
+            <ion-item-option color="danger" @click="deleteUser(user.id)">Delete</ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>

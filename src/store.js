@@ -1,33 +1,85 @@
 import { createStore } from 'vuex'
 
-import { markAuthenticated, authToken, logout, api, env, apiHeaders } from './helper'
+import { markAuthenticated, authToken, logout, api, env, apiHeaders, dupObj } from './helper'
 import contains from 'underscore/modules/contains'
 import values from 'underscore/modules/values'
 import isEmpty from 'underscore/modules/isEmpty'
 import findWhere from 'underscore/modules/findWhere'
 
 const MONEY_MONIT_USER_REFS = 1000
+const DEFAULTS = {
+  category: {
+    name: '',
+    description: ''
+  },
+  bankAccount: {
+    name: '',
+    description: '',
+    color: ''
+  },
+  user: {
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: ''
+  },
+  transaction: {
+    type: 'Withdraw',
+    account_id: '',
+    description: '',
+    amount: '',
+    fee: 0,
+    datetime: new Date().toDateString(),
+    category_id: '',
+    to_account_id: ''
+  },
+  budget: {
+    name: '',
+    from_date: '',
+    to_date: '',
+    active: true,
+    budget_lines: []
+  },
+  budgetLine: {
+    budget_id: '',
+    category_id: '',
+    amount: ''
+  },
+  debt: {
+    notes: '',
+    debited_at: '',
+    debtor_id: '',
+    creditor_id: '',
+    amount: ''
+  },
+  paymentLine: {
+    creditor: '',
+    paid_at: '',
+    notes: '',
+    amount: ''
+  }
+}
 
 export default createStore({
   state: {
     isLoading: false,
     _loadingLog: {},
     categories: [],
-    category: {},
+    category: dupObj(DEFAULTS.category),
     bankAccounts: [],
-    bankAccount: {},
+    bankAccount: dupObj(DEFAULTS.bankAccount),
     transactions: [],
-    transaction: {},
+    transaction: dupObj(DEFAULTS.transaction),
     transactionTypes: [],
     users: [],
-    user: {},
+    user: dupObj(DEFAULTS.user),
     budgets: [],
-    budget: {},
+    budget: dupObj(DEFAULTS.budget),
     debts: [],
-    debt: {},
+    debt: dupObj(DEFAULTS.debt),
     debt_payment: {},
     currentUser: {},
-    budget_line: {},
+    budget_line: dupObj(DEFAULTS.budgetLine),
     transactionsNextPage: 1,
   },
   mutations: {
@@ -243,7 +295,7 @@ export default createStore({
     },
     fetchCategory (context, categoryId) {
       if (!categoryId){
-        context.commit('setCategory', {})
+        context.commit('setCategory', dupObj(DEFAULTS.category))
         return false
       }
       const { state } = context
@@ -338,7 +390,7 @@ export default createStore({
     },
     fetchDebt (context, debtId) {
       if (!debtId){
-        context.commit('setDebt', {})
+        context.commit('setDebt', dupObj(DEFAULTS.debt))
         return false
       }
       const { state } = context
@@ -402,18 +454,19 @@ export default createStore({
       const { state } = context
       const [onSuccess, onError] = opts
       context.commit('showLoader', 'savePaymentLine')
-      const debt = state.debt
-      if (debt.debt_payments == null) {
-        debt.debt_payments = []
+      let path = '/v1/debt_payments'
+      let method = 'POST'
+      let line = this.state.debt_payment
+      if (line.id != null) {
+        path = `/v1/debt_payments/${line.id}`
+        method = 'PUT'
       }
-      if (state.debt_payment != {}) {
-        debt.debt_payments.push(state.debt_payment)
-      }
-      fetch(api(`/v1/debts/${state.debt.id}`), {
-        method: "PUT",
+      line.debt_id = state.debt.id
+      fetch(api(path), {
+        method: method,
         headers: apiHeaders('DEBTS'),
         body: JSON.stringify({
-          debt: debt
+          debt_payment: line
         })
       })
       .then(resp => resp.json())
@@ -423,32 +476,32 @@ export default createStore({
         context.commit('hideLoader', 'savePaymentLine')
       })
     },
+    resetPaymentLine (context) {
+      let line = dupObj(DEFAULTS.paymentLine)
+      line.debt_id = this.state.debt.id
+      context.commit('setPaymentLine', line)
+    },
     fetchPaymentLine (context, opts) {
       const [debtId, paymentLineId] = opts
       const { state } = context
-      if (state.debts.length) {
-        let item = state.debts.find((item) => { return item.id == debtId }) || {}
-        context.commit('setDebt', item)
-        const lines = item.debt_payments || []
-        const line = lines.find((item) => { return item.id == paymentLineId }) || {}
+      context.commit('showLoader', 'fetchDebt')
+      fetch(api(`/v1/debts/${debtId}`), {
+        method: "GET",
+        headers: apiHeaders('DEBTS')
+      })
+      .then(resp => resp.json())
+      .then(function(item) {
+        const line = item.debt_payments.find((item) => { return item.id == paymentLineId }) || dupObj(DEFAULTS.paymentLine)
+        if (paymentLineId == null) {
+          line.debt_id = item.id
+          item.debt_payments.push(line)
+        }
         context.commit('setPaymentLine', line)
-      } else {
-        context.commit('showLoader', 'fetchDebt')
-        fetch(api(`/v1/debts/${debtId}`), {
-          method: "GET",
-          headers: apiHeaders('DEBTS')
-        })
-        .then(resp => resp.json())
-        .then(function(item) {
-          context.commit('setDebt', item)
-          const lines = item.debt_payments || []
-          const line = lines.find((item) => { return item.id == paymentLineId }) || {}
-          context.commit('setPaymentLine', line)
-        })
-        .finally(function () {
-          context.commit('hideLoader', 'fetchDebt')
-        })
-      }
+        context.commit('setDebt', item)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchDebt')
+      })
     },
     deleteDebtLine (context, opts) {
       const [debtId, lineId, onSuccess, onError] = opts
@@ -494,7 +547,7 @@ export default createStore({
     acceptPayment (context, opts) {
       const [debtId, lineId, onSuccess, onError] = opts
       context.commit('showLoader', 'acceptPayment')
-      fetch(api(`/v1/debts/${debtId}/debt_payments/${lineId}/approve`), {
+      fetch(api(`/v1/debt_payments/${lineId}/approve`), {
         method: "POST",
         headers: apiHeaders('DEBTS'),
       })
@@ -529,7 +582,7 @@ export default createStore({
     },
     fetchBankAccount (context, bankAccountId) {
       if (!bankAccountId){
-        context.commit('setBankAccount', {})
+        context.commit('setBankAccount', dupObj(DEFAULTS.bankAccount))
         return false
       }
       const { state } = context
@@ -559,7 +612,7 @@ export default createStore({
         method: "PUT",
         headers: apiHeaders('BANK_ACCOUNTS'),
         body: JSON.stringify({
-          bank_account: state.bankAccount
+          account: state.bankAccount
         })
       })
       .then(resp => resp.json())
@@ -577,7 +630,7 @@ export default createStore({
         method: "POST",
         headers: apiHeaders('BANK_ACCOUNTS'),
         body: JSON.stringify({
-          bank_account: state.bankAccount
+          account: state.bankAccount
         })
       })
       .then(resp => resp.json())
@@ -625,7 +678,7 @@ export default createStore({
     },
     fetchUser (context, userId) {
       if (!userId){
-        context.commit('setUser', {})
+        context.commit('setUser', dupObj(DEFAULTS.user))
         return false
       }
       const { state } = context
@@ -744,7 +797,7 @@ export default createStore({
     },
     fetchTransaction (context, transactionId) {
       if (!transactionId){
-        context.commit('setTransaction', {})
+        context.commit('setTransaction', dupObj(DEFAULTS.transaction))
         return false
       }
       const { state } = context
@@ -855,7 +908,7 @@ export default createStore({
     },
     fetchBudget (context, budgetId) {
       if (!budgetId){
-        context.commit('setBudget', {})
+        context.commit('setBudget', dupObj(DEFAULTS.budget))
         return false
       }
       const { state } = context
@@ -928,49 +981,52 @@ export default createStore({
         context.commit('hideLoader', 'deleteBudgetLine')
       })
     },
+    resetBudgetLine(context) {
+      let line = dupObj(DEFAULTS.budgetLine)
+      line.budget_id = this.state.budget.id
+      context.commit('setBudgetLine', line)
+    },
     fetchBudgetLine (context, opts) {
       const [budgetId, budgetLineId] = opts
       const { state } = context
-      if (state.budgets.length) {
-        let item = state.budgets.find((item) => { return item.id == budgetId }) || {}
-        context.commit('setBudget', item)
-        const lines = item.budget_lines || []
-        const line = lines.find((item) => { return item.id == budgetLineId }) || {}
+      context.commit('showLoader', 'fetchBudget')
+      fetch(api(`/v1/budgets/${budgetId}`), {
+        method: "GET",
+        headers: apiHeaders('BUDGETS')
+      })
+      .then(resp => resp.json())
+      .then(function(item) {
+        const line = item.budget_lines.find((item) => { return item.id == budgetLineId }) || dupObj(DEFAULTS.budgetLine)
+        if (budgetLineId == null) {
+          line.budget_id = item.id
+          item.budget_lines.push(line)
+        }
         context.commit('setBudgetLine', line)
-      } else {
-        context.commit('showLoader', 'fetchBudget')
-        fetch(api(`/v1/budgets/${budgetId}`), {
-          method: "GET",
-          headers: apiHeaders('BUDGETS')
-        })
-        .then(resp => resp.json())
-        .then(function(item) {
-          context.commit('setBudget', item)
-          const lines = item.budget_lines || []
-          const line = lines.find((item) => { return item.id == budgetLineId }) || {}
-          context.commit('setBudgetLine', line)
-        })
-        .finally(function () {
-          context.commit('hideLoader', 'fetchBudget')
-        })
-      }
+        context.commit('setBudget', item)
+      })
+      .finally(function () {
+        context.commit('hideLoader', 'fetchBudget')
+      })
     },
     saveBudgetLine (context, opts) {
       const { state } = context
       const [onSuccess, onError] = opts
       context.commit('showLoader', 'saveBudgetLine')
-      const budget = state.budget
-      if (budget.budget_lines == null) {
-        budget.budget_lines = []
+
+      let path = '/v1/budget_lines'
+      let method = 'POST'
+      let line = state.budget_line
+
+      if (line.id != null) {
+        path = `/v1/budget_lines/${line.id}`
+        method = 'PUT'
       }
-      if (state.budget_line != {}) {
-        budget.budget_lines.push(state.budget_line)
-      }
-      fetch(api(`/v1/budgets/${state.budget.id}`), {
-        method: "PUT",
+      line.budget_id = state.budget.id
+      fetch(api(path), {
+        method: method,
         headers: apiHeaders('BUDGETS'),
         body: JSON.stringify({
-          budget: budget
+          budget_line: line
         })
       })
       .then(resp => resp.json())

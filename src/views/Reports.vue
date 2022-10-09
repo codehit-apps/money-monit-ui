@@ -6,18 +6,20 @@
           <ion-back-button defaultHref="/home"></ion-back-button>
         </ion-buttons>
         <ion-title class="align-center">Reports</ion-title>
+        <ion-buttons slot="end">
+          <ion-button @click="this.showFilter=true">
+            <ion-icon slot="icon-only" :icon="funnelOutline"/>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-card class="ion-margin-bottom">
         <ion-card-header>
-          <ion-card-subtitle>Total Transactions</ion-card-subtitle>
+          <ion-card-subtitle>Total Expenses</ion-card-subtitle>
           <ion-card-title>{{toPeso(totalTransactions)}}</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          <div v-if="!showFilter">
-            <a href="javascript:void(0);" class="view-filters-link" @click="this.showFilter=true">view filters</a>
-          </div>
           <div v-if="showFilter">
             <ion-item>
               <ion-label position="floating"> Type </ion-label>
@@ -56,8 +58,8 @@
             <div class="ion-padding-top content-between d-flex-center">
               <a :href="`/#/transactions?q[category_id_in]=${filter.category_id}&q[datetime_gteq]=${filter.from_date}&q[datetime_lteq]=${filter.to_date}&q[type_in]=${filter.type}&q[account_id_in]=${filter.account_id}`" class="view-txns-link" target="_blank">view transactions</a>
               <div class="d-flex-center">
-                <a href="javascript:void(0);" class="view-filters-link ion-margin-end" @click="this.showFilter=false">close</a>
-                <ion-button type="submit" class="ion-no-margin" @click="filterTransactions" color="primary">Filter</ion-button>
+               <ion-button type="button" class="ion-margin-end" @click="showFilter=false" color="light">close</ion-button>
+                <ion-button type="button" class="ion-margin-end" @click="filterTransactions" color="primary">Filter</ion-button>
               </div>
             </div>
           </div>
@@ -112,13 +114,19 @@
 </template>
 
 <script >
-import { IonPage, IonButton, IonDatetime, IonItem, IonSelect, IonLabel, IonSelectOption, IonCard, IonCardHeader, IonCardContent, IonText, IonCardTitle, IonCardSubtitle, IonHeader, IonButtons, IonBackButton, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { IonIcon, IonPage, IonButton, IonDatetime, IonItem, IonSelect, IonLabel, IonSelectOption, IonCard, IonCardHeader, IonCardContent, IonText, IonCardTitle, IonCardSubtitle, IonHeader, IonButtons, IonBackButton, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 import { pesoFormatter, dateFormatter, api, env, apiHeaders } from '../helper'
 import { findWhere, each, pluck } from 'underscore';
+import { funnelOutline } from 'ionicons/icons';
 
 export default  {
   name: 'Reports',
-  components: {IonButton, IonDatetime, IonItem, IonSelect, IonLabel, IonSelectOption, IonCard, IonCardHeader, IonCardContent, IonText, IonCardTitle, IonCardSubtitle, IonHeader, IonButtons, IonBackButton, IonToolbar, IonTitle, IonContent, IonPage },
+  components: {IonIcon, IonButton, IonDatetime, IonItem, IonSelect, IonLabel, IonSelectOption, IonCard, IonCardHeader, IonCardContent, IonText, IonCardTitle, IonCardSubtitle, IonHeader, IonButtons, IonBackButton, IonToolbar, IonTitle, IonContent, IonPage },
+  setup() {
+    return {
+      funnelOutline,
+    }
+  },
   data: function () {
     return {
       expenses: {},
@@ -148,6 +156,7 @@ export default  {
       return pesoFormatter().format(num)
     },
     formatDate: function (date) {
+      if (date == null || date == '') return null
       return dateFormatter().format(new Date(date))
     },
     budgetCategory: function (category_id) {
