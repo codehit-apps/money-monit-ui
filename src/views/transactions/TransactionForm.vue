@@ -84,8 +84,8 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="floating"> DateTime </ion-label>
-        <ion-datetime locale="en-PH" hour-cycle="h12" display-format="MMM M, YYYY h:m A" v-model="datetime"/>
+        <ion-label position="floating" class="mb-4"> DateTime </ion-label>
+        <ion-datetime v-model="datetime" />
       </ion-item>
       <div v-if="!!errors['datetime']" class="ion-margin-bottom ion-margin-start">
         <ion-text color="danger" v-for="error in errors['datetime']" :key="error">{{ error }}</ion-text>

@@ -5,6 +5,7 @@ import contains from 'underscore/modules/contains'
 import values from 'underscore/modules/values'
 import isEmpty from 'underscore/modules/isEmpty'
 import findWhere from 'underscore/modules/findWhere'
+import { formatInTimeZone } from 'date-fns-tz'
 
 const MONEY_MONIT_USER_REFS = 1000
 const DEFAULTS = {
@@ -29,7 +30,7 @@ const DEFAULTS = {
     description: '',
     amount: '',
     fee: 0,
-    datetime: new Date().toISOString(),
+    datetime: formatInTimeZone(new Date(), 'Asia/Manila', "yyyy-MM-dd HH:mm").split(' ').join('T'),
     category_id: '',
     to_account_id: ''
   },
