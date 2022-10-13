@@ -49,13 +49,13 @@
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating"> From </ion-label>
-              <ion-datetime v-model="filter.from_date"/>
+              <ion-label position="floating" class="mb-4"> From </ion-label>
+              <ion-datetime v-model="filter.from_date" presentation="date"/>
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating"> To </ion-label>
-              <ion-datetime v-model="filter.to_date"/>
+              <ion-label position="floating" class="mb-4"> To </ion-label>
+              <ion-datetime v-model="filter.to_date" presentation="date"/>
             </ion-item>
 
             <div class="ion-padding-top content-end d-flex-center">
@@ -123,12 +123,17 @@ import { IonCard, IonCardContent, IonDatetime, IonSelect, IonLabel, IonSelectOpt
 import { funnel, funnelOutline, addCircle, arrowForwardOutline } from 'ionicons/icons';
 import { findWhere, isUndefined, isNull, groupBy, pluck } from 'underscore';
 import { pesoFormatter, dateFormatter } from '../../helper'
+import { formatInTimeZone } from 'date-fns-tz'
+
+const formatInZone = function(date) {
+  formatInTimeZone(date, 'Asia/Manila', "yyyy-MM-dd HH:mm").split(' ').join('T')
+}
 
 const DEFAULT_FILTERS = {
   account_id: '',
   category_id: '',
-  from_date: '',
-  to_date: new Date().toDateString(),
+  from_date: formatInZone(new Date()),
+  to_date: formatInZone(new Date()),
   type: '',
 }
 
@@ -207,8 +212,8 @@ export default  {
       this.filter = {
         account_id: p['q[account_id_in]'] || '',
         category_id: p['q[category_id_in]'] || '',
-        from_date: p['q[datetime_gteq]'] || '',
-        to_date: p['q[datetime_lteq]'] || new Date().toDateString(),
+        from_date: p['q[datetime_gteq]'] || formatInZone(new Date()),
+        to_date: p['q[datetime_lteq]'] || formatInZone(new Date()),
         type: p['q[type_in]'] || '',
       }
     },
