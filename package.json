@@ -1,7 +1,8 @@
 {
-  "name": "act-monit",
+  "name": "money-monit",
   "version": "0.0.1",
   "private": true,
+  "description": "Money Monit App",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -31,6 +32,7 @@
     "@vue/cli-plugin-babel": "~5.0.8",
     "@vue/cli-plugin-e2e-cypress": "~5.0.8",
     "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-plugin-pwa": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.8",
     "@vue/cli-plugin-unit-jest": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
@@ -43,6 +45,5 @@
     "typescript": "~3.9.3",
     "vue-deploy-s3": "^0.1.0",
     "vue-jest": "^5.0.0-0"
-  },
-  "description": "actMonit app"
+  }
 }

@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "actMonit",
+  "appName": "moneyMonit",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist",
